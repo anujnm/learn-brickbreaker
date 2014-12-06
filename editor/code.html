@@ -1,0 +1,291 @@
+﻿<html>
+<head>
+
+    <title>CuriousCoderz</title>
+    <link rel="stylesheet" href="style/codemirror.css">
+    <!--<link rel="stylesheet" href="http://codemirror.net/theme/monokai.css">-->
+
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/codemirror.js"></script>
+    <script src="js/codemirror-compressed.js"></script>
+
+    <link rel="stylesheet" href="hint/show-hint.css" />
+    <script src="hint/show-hint.js"></script>
+    <script src="hint/anyword-hint.js"></script>
+
+    <script src="hint/javascript-hint.js"></script>
+
+    <script type="text/javascript">        
+        
+    </script>
+
+
+
+    <script type="text/javascript">
+
+        var frame, contents, body_compile, goal_open;
+        var lesson = getUrlParameter('lesson');
+
+        $(window).load(function () {
+
+            init_accordian();
+
+
+
+
+            frame = $('#output_iframe'),
+            contents = frame.contents(),
+            body_compile = contents.find('body');
+
+            var predifined_js = "".concat('function onCreate() {\n \n } \n', " function onUpdate() {\n \n } \n");
+
+
+            $("#user_javascript").html(predifined_js);
+
+            var editor_text_area = $("#user_javascript");
+
+            CodeMirror.fromTextArea(document.getElementById("user_javascript"), {
+                lineNumbers: true,
+                mode: "javascript",
+                value: predifined_js,
+                smartIndent: true,
+                lineWrapping: true,
+                autofocus: true,
+                globalVars: true,
+                theme: "monokai",
+                extraKeys: {
+                    "Ctrl-Space": "autocomplete"
+                }
+            });
+
+            CodeMirror.commands.autocomplete = function (cm) {
+                CodeMirror.showHint(cm, CodeMirror.hint.javascript);
+            }
+
+
+
+            $('#output_iframe').attr('src', "../phaser/lessons" + lesson + ".html");
+
+
+        });
+
+
+
+
+
+
+        function compile() {
+
+
+            var user_javascript_text = "<script> " + $("#user_javascript").val() + "<\/script>";
+            //var game = merge_user_code(user_javascript_text);
+            //body_compile.html(game);
+
+
+            $(".output_iframe").contents().find("body").append(user_javascript_text);
+            $(".output_iframe").show();
+            window.frames['output_iframe'].startGame();
+
+
+
+            //body_compile.html(user_html_text);
+
+
+
+        }
+
+        function merge_user_code(user_javascript_text) {
+
+            var game = "";
+            game = game.concat('<html><head><script src="', 'http://code.createjs.com/createjs-2013.12.12.min.js"',
+                            '><\/script><script>var stage; function init() { stage = new createjs.Stage("canvas");var ball = new createjs.Shape(); ball.graphics.beginFill("#000000").drawCircle(0,0,50);  ball.x = 60; ball.y = 200;          ball.addEventListener("click", onClick);createjs.Tween.get(ball, { loop: true }).to({ x: 440 }, 3000).to({ x: 60 }, 3000);createjs.Ticker.addEventListener("tick", tick); stage.addChild(ball);  } function onClick(event)   {  console.log("Yo!"); }            function tick (event)   {   stage.update(); } <\/script>'
+                           , '</head><body onload="init()"> <canvas id ="canvas" width="500" height="500"> Alternative Content</canvas><div>TODO write content</div> </body></html>');
+            return game;
+
+        }
+
+        function init_accordian() {
+
+            // Script to show the first dd element  
+            ///$(".dd").filter(":nth-child(n+4)").addClass("hide");
+            $(".dd").addClass("hide");
+
+
+            // On "mouseenter" slide down current dd, slideup all other dd "siblings" 
+            $(".dl").on("click", ".dt", function () {
+
+
+                if (!goal_open) {
+                    goal_open = true;
+                    $("#arrow").attr("src", "img/arrow_up.png");
+                    $(this).next().slideDown(200).siblings(".dd").slideUp(200);
+                    //$(this).siblings(".dt #arrow").attr("src", "img/arrow_up.png");
+                } else {
+                    goal_open = false;
+                    $("#arrow").attr("src", "img/arrow_down.png");
+                    $(this).next().slideUp(200).siblings(".dd").slideUp(200);
+                }
+
+            });
+
+
+
+
+
+        }
+
+
+
+
+
+
+
+
+    </script>
+    <style>
+        /*@import url(http://fonts.googleapis.com/css?family=Fjalla+One);
+
+/* SCSS Var 
+$main-color: #c03e3e;
+$header-color: white;
+$font-stack: 'Fjalla One', sans-serif;*/
+
+
+        body {
+            background-image: url(http://subtlepatterns.com/patterns/dark_geometric.png);
+            color: white;
+            font-family: 'Fjalla One', sans-serif;
+            margin: 20px auto;
+        }
+
+        .CodeMirror {
+            border: 1px solid #eee;
+            height: auto;
+            line-height: 1.5;
+            width: 50% !important;
+            display: inline-block;
+        }
+
+        .output-iframe {
+            border: 1px solid #f8f8f2;
+            height: 85%;
+            width: 45% !important;
+            display: inline-block;
+            float: right;
+            margin-right: 2px;
+        }
+
+        h1 {
+            color: white;
+            font-size: 40px;
+        }
+
+        .dl {
+            -moz-box-shadow: 0px 0px 10px #000000;
+            -webkit-box-shadow: 0px 0px 10px #000000;
+            box-shadow: 0px 0px 10px #000000;
+        }
+
+        .dt {
+            background: rgba(128, 128, 128,0.5);
+            border-bottom: 1px solid #c5c5c5;
+            border-top: 1px solid white;
+            cursor: pointer;
+            font-size: 1.2em;
+            font-weight: bolder;
+            line-height: 2em;
+            padding-left: 1em;
+        }
+
+            .dt:first-child {
+                border-top: none;
+            }
+
+            .dt:nth-last-child(2) {
+                border-bottom: none;
+            }
+
+        .dd {
+            background: rgba(187, 187, 187,0.5);
+            border-bottom: 0px solid #c5c5c5;
+            margin: 0px;
+            padding: 1em 0px;
+            padding-left: 1.5em;
+            font-size: 0.7em;
+            font-weight: lighter;
+            width: 100%;
+        }
+
+        .hide {
+            display: none;
+        }
+
+        .arrow {
+            margin: 0.7em;
+            max-width: 25px;
+            vertical-align: central;
+        }
+
+        .top_bars {
+            height: 15%;
+        }
+
+        .main_content {
+            height: 85%;
+            max-height: 85%;
+        }
+
+        /*.CodeMirror-hints {
+            background-color: red;
+        }
+
+        .CodeMirror-hint {
+            background-color: green;
+        }
+
+        .CodeMirror-hint-active {
+            background-color: blue;
+            color: yellow;
+        }*/
+
+        .output_iframe {
+            display: none;
+            width: 45%;
+            height: 100%;
+            float: right;
+        }
+    </style>
+
+</head>
+<body>
+
+
+    <div id="top_bars">
+        <dl class="dl">
+            <dt class="dt">Who stared in the Invisible Boy? 
+            <img class="arrow" id="arrow" src="img/arrow_down.png" style="float: right"></dt>
+            <dd class="dd">Roby, The Robot </dd>
+        </dl>
+    </div>
+
+
+
+
+    <div id="main_content" style="display: block">
+
+
+        <textarea id="user_javascript" rows="20" cols="50" style="width: 50% !important; max-width: 50% !important; height: 85%; max-height: 85%; display: inline-block"> 
+	</textarea>
+
+        <button id="Compile" onclick="compile()" style="display: inline-block; vertical-align: top; margin: auto">Run</button>
+
+        <iframe id="output_iframe" name="output_iframe" class="output_iframe"></iframe>
+
+    </div>
+
+
+</body>
+
+</html>
