@@ -1,0 +1,111 @@
+﻿<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>hello phaser!</title>
+    <script src="phaser.min.js"></script>
+    <script src="phaser.js"></script>
+</head>
+<body>
+
+    <script type="text/javascript">
+
+
+        window.onload = function () {
+
+            var ball;
+
+            var paddles;
+            var paddle;
+            var bricks;
+
+            var ballOnPaddle = true;
+
+            var lives = 3;
+            var score = 0;
+
+            var scoreText;
+            var livesText;
+            var introText;
+
+            var s;
+            var game = new Phaser.Game(800, 600, Phaser.AUTO, 'game_canvas', { preload: preload, create: create, update: update });
+
+            function preload() {
+
+                game.load.atlas('breakout', 'assets/games/breakout/breakout.png', 'assets/games/breakout/breakout.json');
+                game.load.image('starfield', 'assets/misc/starfield.jpg');
+
+            }
+
+
+            function Paddels() {
+                this.mPaddels = new Array();
+                this.addPaddel =  function()
+                {
+                    this.mPaddel = new Paddel();
+                    this.mPaddels.push(this.mPaddel);
+                    return this.mPaddel;
+                };
+            }
+
+
+            function Paddel() {
+                this.primitive = game.add.sprite(game.world.centerX, 500, 'breakout', 'paddle_big.png');
+                this.primitive.anchor.setTo(0.5, 0.5);
+                game.physics.enable(this.primitive, Phaser.Physics.ARCADE);
+                this.primitive.body.collideWorldBounds = true;
+                this.primitive.body.bounce.set(1);
+                return this;
+            }
+
+
+            function onCreate() {
+
+                paddles = new Paddels();
+                console.log("onCreate -> Paddels = " + JSON.stringify(paddles));
+                paddle = paddles.addPaddel();
+                console.log("onCreate -> paddel = " + paddle);
+            }
+
+
+            function create() {
+
+                game.physics.startSystem(Phaser.Physics.ARCADE);
+
+                //  We check bounds collisions against all walls other than the bottom one
+                game.physics.arcade.checkCollision.down = false;
+
+                s = game.add.tileSprite(0, 0, 800, 600, 'starfield');
+
+                onCreate();
+            }
+
+            function onUpdate() {
+                if (game.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
+                    console.log("onUpdate -> Left->paddle = " + paddle);
+                }
+
+
+            }
+
+            function update() {
+                //  Fun, but a little sea-sick inducing :) Uncomment if you like!
+                // s.tilePosition.x += (game.input.speed.x / 2);
+
+
+                onUpdate();
+
+            }
+
+
+        };
+
+    </script>
+
+    <h1>Brick Breaker!</h1>
+
+    <div id="game_canvas"></div>
+
+</body>
+</html>
