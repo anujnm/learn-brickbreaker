@@ -1,123 +1,131 @@
 ﻿<!doctype html>
 <html>
-    <head>
-        <meta charset="UTF-8" />
-        <title>hello phaser!</title>
-        <script src="phaser.min.js"></script>
-        <script src="phaser.js"></script>
-    </head>
-    <body>
+<head>
+    <meta charset="UTF-8" />
+    <title>hello phaser!</title>
+    <script src="phaser.min.js"></script>
+    <script src="phaser.js"></script>
+</head>
+<body>
 
-        <script type="text/javascript">
+    <script type="text/javascript">
 
 
-            window.onload = function () {
-                var paddleList;
-                var paddle;
-                var starfield;
-                var game = new Phaser.Game(800, 600, Phaser.AUTO, 'game_canvas', {preload: preload, create: create, update: update});
+        window.onload = function () {
+            // startGame();
+        };
 
-//Abstraced Spiders Lib**************************START**************************
 
-                function PaddleList() {
-                    this.mPaddleList = new Array();
-                    this.addPaddle = function ()
-                    {
-                        this.mPaddle = new Paddle();
-                        this.mPaddleList.push(this.mPaddle);
-                        return this.mPaddle;
-                    };
-                    return this;
+
+        function startGame() {
+
+
+            var paddleList;
+            var paddle;
+            var starfield;
+            var game = new Phaser.Game(800, 600, Phaser.AUTO, 'game_canvas', { preload: preload, create: create, update: update });
+
+            //Abstraced Spiders Lib**************************START**************************
+
+            function PaddleList() {
+                this.mPaddleList = new Array();
+                this.addPaddle = function () {
+                    this.mPaddle = new Paddle();
+                    this.mPaddleList.push(this.mPaddle);
+                    return this.mPaddle;
+                };
+                return this;
+            }
+
+            function Paddle() {
+                this.mPrimitive = game.add.sprite(game.world.centerX, 500, 'breakout', 'paddle_big.png');
+                this.mPrimitive.anchor.setTo(0.5, 0.5);
+                game.physics.enable(this.mPrimitive, Phaser.Physics.ARCADE);
+                this.mPrimitive.body.collideWorldBounds = true;
+                this.mPrimitive.body.bounce.set(1);
+
+                // set x value of paddle
+                this.setX = function (x) {
+                    this.mPrimitive.x = x;
+                    return this.mPrimitive.x;
+                };
+
+                // get x value of paddle
+                this.getX = function () {
+                    return this.mPrimitive.x;
+                };
+
+                // set y value of padde
+                this.setY = function (y) {
+                    this.mPrimitive.y = y;
+                    return this.mPrimitive.y;
+                };
+
+                // get y value of paddle
+                this.getY = function () {
+                    return this.mPrimitive.y;
+                };
+                return this;
+            }
+            //Abstraced Spiders Lib************************END******************************
+
+
+            //Phaser BrickBreaker**************************START****************************
+            function preload() {
+                game.load.atlas('breakout', 'assets/games/breakout/breakout.png', 'assets/games/breakout/breakout.json');
+                game.load.image('starfield', 'assets/misc/starfield.jpg');
+            }
+
+            function create() {
+
+                game.physics.startSystem(Phaser.Physics.ARCADE);
+
+                //  We check bounds collisions against all walls other than the bottom one
+                game.physics.arcade.checkCollision.down = false;
+
+                starfield = game.add.tileSprite(0, 0, 600, 600, 'starfield');
+
+
+                onCreate();
+            }
+
+            function update() {
+                onUpdate();
+            }
+            //Phaser BrickBreaker*******************END*************************************
+
+
+            //user code**********************START******************************************
+            function onCreate() {
+                paddleList = new PaddleList();
+                paddle = paddleList.addPaddle();
+                paddle.setX(game.world.centerX)
+                paddle.setY(550);
+            }
+
+            function onUpdate() {
+                if (game.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
+                    paddle.setX(paddle.getX() - 5);  // -5 here is the speed
                 }
-
-                function Paddle() {
-                    this.mPrimitive = game.add.sprite(game.world.centerX, 500, 'breakout', 'paddle_big.png');
-                    this.mPrimitive.anchor.setTo(0.5, 0.5);
-                    game.physics.enable(this.mPrimitive, Phaser.Physics.ARCADE);
-                    this.mPrimitive.body.collideWorldBounds = true;
-                    this.mPrimitive.body.bounce.set(1);
-
-                    // set x value of paddle
-                    this.setX = function (x)
-                    {
-                        this.mPrimitive.x = x;
-                        return   this.mPrimitive.x;
-                    };
-
-                    // get x value of paddle
-                    this.getX = function ()
-                    {
-                        return   this.mPrimitive.x;
-                    };
-
-                    // set y value of padde
-                    this.setY = function (y)
-                    {
-                        this.mPrimitive.y = y;
-                        return   this.mPrimitive.y;
-                    };
-
-                    // get y value of paddle
-                    this.getY = function ()
-                    {
-                        return   this.mPrimitive.y;
-                    };
-                    return this;
+                else if (game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
+                    paddle.setX(paddle.getX() + 5); // -5 here is the speed
                 }
-//Abstraced Spiders Lib************************END******************************
+            }
+            //user code*************************END*****************************************    
+
+        }
+
+        function unLoadGame() {
+
+            document.getElementById("game_canvas").innerHTML = "";
+
+        }
+
+    </script>
 
 
-//Phaser BrickBreaker**************************START****************************
-                function preload() {
-                    game.load.atlas('breakout', 'assets/games/breakout/breakout.png', 'assets/games/breakout/breakout.json');
-                    game.load.image('starfield', 'assets/misc/starfield.jpg');
-                }
 
-                function create() {
+    <div id="game_canvas"></div>
 
-                    game.physics.startSystem(Phaser.Physics.ARCADE);
-
-                    //  We check bounds collisions against all walls other than the bottom one
-                    game.physics.arcade.checkCollision.down = false;
-
-                    starfield = game.add.tileSprite(0, 0, 800, 600, 'starfield');
-
-
-                    onCreate();
-                }
-
-                function update() {
-                    onUpdate();
-                }
-//Phaser BrickBreaker*******************END*************************************
-
-
-//user code**********************START******************************************
-                function onCreate() {
-                    paddleList = new PaddleList();
-                    paddle = paddleList.addPaddle();
-                    paddle.setX(game.world.centerX)
-                    paddle.setY(550);
-                }
-
-                function onUpdate() {
-                    if (game.input.keyboard.isDown(Phaser.Keyboard.LEFT))
-                    {
-                        paddle.setX(paddle.getX() - 5);  // -5 here is the speed
-                    }
-                    else if (game.input.keyboard.isDown(Phaser.Keyboard.RIGHT))
-                    {
-                        paddle.setX(paddle.getX() + 5); // -5 here is the speed
-                    }
-                }
-//user code*************************END*****************************************                
-            };
-
-        </script>
-
-        <h1>Brick Breaker!</h1>
-
-        <div id="game_canvas"></div>
-
-    </body>
+</body>
 </html>
