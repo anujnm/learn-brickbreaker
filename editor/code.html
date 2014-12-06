@@ -7,6 +7,7 @@
 
     <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
     <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+
     <script src="js/utils.js"></script>
     <script src="js/codemirror.js"></script>
     <script src="js/codemirror-compressed.js"></script>
@@ -16,7 +17,10 @@
     <script src="hint/anyword-hint.js"></script>
 
     <script src="hint/javascript-hint.js"></script>
-
+    <link rel="stylesheet" href="fancybox/jquery.fancybox.css"/>
+    <script src="fancybox/jquery.fancybox.js"></script>
+    <script src="fancybox/jquery.fancybox.pack.js"></script>
+    
     <script type="text/javascript">        
         
     </script>
@@ -27,22 +31,24 @@
 
         var frame, contents, body_compile, goal_open;
         var lesson = getUrlParameter('lesson');
-
+        var cm;
+        var predifined_js = "".concat('function onCreate() {\n \n } \n', " function onUpdate() {\n \n } \n");
         $(window).load(function () {
 
             init_accordian();
+            init_fancybox();
 
             frame = $('#output_iframe'),
             contents = frame.contents(),
             body_compile = contents.find('body');
 
-            var predifined_js = "".concat('function onCreate() {\n \n } \n', " function onUpdate() {\n \n } \n");
+
 
             $("#user_javascript").html(predifined_js);
 
             var editor_text_area = $("#user_javascript");
 
-            CodeMirror.fromTextArea(document.getElementById("user_javascript"), {
+            cm = CodeMirror.fromTextArea(document.getElementById("user_javascript"), {
                 lineNumbers: true,
                 mode: "javascript",
                 value: predifined_js,
@@ -62,11 +68,14 @@
 
             $('#output_iframe').attr('src', "../phaser/lessons" + lesson + ".html");
 
-
+            $('a.various').on("click", function () {
+                compile();
+            });
         });
 
 
         function compile() {
+            debugger;
 
             var user_javascript_text = "<script> " + $("#user_javascript").val() + "<\/script>";
             $(".output_iframe").contents().find("body").append(user_javascript_text);
@@ -76,7 +85,21 @@
 
         }
 
+        function init_fancybox() {
 
+            $(".various").fancybox({
+                maxWidth: 800,
+                maxHeight: 600,
+                fitToView: false,
+                width: '70%',
+                height: '70%',
+                autoSize: false,
+                closeClick: false,
+                openEffect: 'none',
+                closeEffect: 'none'
+            });
+
+        }
 
         function init_accordian() {
 
@@ -108,6 +131,12 @@
 
         }
 
+        function resetEditor() {
+            cm.setValue(predifined_js);
+            cm.clearHistory();
+
+            //$("#user_javascript").html(predifined_js);
+        }
 
     </script>
     <style>
@@ -122,17 +151,18 @@
             border: 1px solid #eee;
             height: auto;
             line-height: 1.5;
-            width: 50% !important;
+            width: 45% !important;
             display: inline-block;
         }
 
-        .output-iframe {
+        .output_iframe {
             border: 1px solid #f8f8f2;
-            height: 85%;
-            width: 45% !important;
-            display: inline-block;
+            height: 90%;
+            max-height: 90%;
+            width: 48% !important;
             float: right;
             margin-right: 2px;
+            display: none;
         }
 
         h1 {
@@ -207,13 +237,6 @@
             background-color: blue;
             color: yellow;
         }*/
-
-        .output_iframe {
-            display: none;
-            width: 45%;
-            height: 100%;
-            float: right;
-        }
     </style>
 
 </head>
@@ -234,13 +257,20 @@
     <div id="main_content" style="display: block">
 
 
-        <textarea id="user_javascript" rows="20" cols="50" style="width: 50% !important; max-width: 50% !important; height: 85%; max-height: 85%; display: inline-block"> 
+        <textarea id="user_javascript" rows="20" cols="40" style="height: 85%; max-height: 85%; display: inline-block"> 
 	</textarea>
 
-        <button id="Compile" onclick="compile()" style="display: inline-block; vertical-align: top; margin: auto">Run</button>
 
-        <iframe id="output_iframe" name="output_iframe" class="output_iframe"></iframe>
+        <div style="display: inline-block; vertical-align: top; margin: auto"">
+            <a class="various" href="#output_div">Iframe</a>
+            <button id="Compile" onclick="compile()" style="display: block; vertical-align: top; margin: auto;background: url(img/run.png) no-repeat;">Run</button>
+            <button id="btnReset" onclick="resetEditor()" style="display: block; vertical-align: top; margin: auto">Reset</button>
+        </div>
 
+
+        <div id="output_div">
+            <iframe id="output_iframe" name="output_iframe" class="output_iframe"></iframe>
+        </div>
     </div>
 
 
