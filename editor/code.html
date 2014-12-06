@@ -32,15 +32,11 @@
 
             init_accordian();
 
-
-
-
             frame = $('#output_iframe'),
             contents = frame.contents(),
             body_compile = contents.find('body');
 
             var predifined_js = "".concat('function onCreate() {\n \n } \n', " function onUpdate() {\n \n } \n");
-
 
             $("#user_javascript").html(predifined_js);
 
@@ -64,47 +60,23 @@
                 CodeMirror.showHint(cm, CodeMirror.hint.javascript);
             }
 
-
-
             $('#output_iframe').attr('src', "../phaser/lessons" + lesson + ".html");
 
 
         });
 
 
-
-
-
-
         function compile() {
 
-
             var user_javascript_text = "<script> " + $("#user_javascript").val() + "<\/script>";
-            //var game = merge_user_code(user_javascript_text);
-            //body_compile.html(game);
-
-
             $(".output_iframe").contents().find("body").append(user_javascript_text);
-            $(".output_iframe").show();
+            window.frames['output_iframe'].unLoadGame();
             window.frames['output_iframe'].startGame();
-
-
-
-            //body_compile.html(user_html_text);
-
-
+            $(".output_iframe").show();
 
         }
 
-        function merge_user_code(user_javascript_text) {
 
-            var game = "";
-            game = game.concat('<html><head><script src="', 'http://code.createjs.com/createjs-2013.12.12.min.js"',
-                            '><\/script><script>var stage; function init() { stage = new createjs.Stage("canvas");var ball = new createjs.Shape(); ball.graphics.beginFill("#000000").drawCircle(0,0,50);  ball.x = 60; ball.y = 200;          ball.addEventListener("click", onClick);createjs.Tween.get(ball, { loop: true }).to({ x: 440 }, 3000).to({ x: 60 }, 3000);createjs.Ticker.addEventListener("tick", tick); stage.addChild(ball);  } function onClick(event)   {  console.log("Yo!"); }            function tick (event)   {   stage.update(); } <\/script>'
-                           , '</head><body onload="init()"> <canvas id ="canvas" width="500" height="500"> Alternative Content</canvas><div>TODO write content</div> </body></html>');
-            return game;
-
-        }
 
         function init_accordian() {
 
@@ -137,22 +109,8 @@
         }
 
 
-
-
-
-
-
-
     </script>
     <style>
-        /*@import url(http://fonts.googleapis.com/css?family=Fjalla+One);
-
-/* SCSS Var 
-$main-color: #c03e3e;
-$header-color: white;
-$font-stack: 'Fjalla One', sans-serif;*/
-
-
         body {
             background-image: url(http://subtlepatterns.com/patterns/dark_geometric.png);
             color: white;
