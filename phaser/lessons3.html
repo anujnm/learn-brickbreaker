@@ -413,6 +413,11 @@
                         return   this.mType;
                     };
 
+                    this.getType = function ()
+                    {
+                        return   this.mType;
+                    };
+
                     this.setX = function (x)
                     {
                         this.mPrimitive.x = x;
@@ -460,9 +465,115 @@
                     return this;
                 }
 
+                function GUIText() {
+
+                    this.mText = game.add.text(0, 0, '', {font: "20px Arial", fill: "#ffffff", align: "left"});
+
+                    this.setX = function (x)
+                    {
+                        this.mText.x = x;
+                        return    this.mText.x;
+                    };
+
+                    this.getX = function ()
+                    {
+                        return   this.mText.x;
+                    };
+
+                    this.setY = function (y)
+                    {
+                        this.mText.y = y;
+                        return  this.mText.y;
+                    };
+
+                    this.getY = function ()
+                    {
+                        return   this.mText.y;
+                    };
+
+                    this.setText = function (text)
+                    {
+                        this.mText.text = text;
+                        return this.mText.text;
+                    };
+
+                    this.getText = function ()
+                    {
+                        return this.mText.text;
+                    };
+
+                    this.setHeight = function (height)
+                    {
+                        this.mText.height = height;
+                        return  this.mText.height;
+                    };
+
+                    this.getHeight = function ()
+                    {
+                        return this.mText.height;
+                    };
+
+                    this.setWidth = function (width)
+                    {
+                        this.mText.width = width;
+                        return  this.mText.width;
+                    };
+
+                    this.getWidth = function ()
+                    {
+                        return this.mText.width;
+                    };
+
+                    this.setFont = function (font)
+                    {
+                        this.mText.font = font;
+                        return  this.mText.font;
+                    };
+
+                    this.getFont = function ()
+                    {
+                        return this.mText.font;
+                    };
+
+                    this.setFontSize = function (fontSize)
+                    {
+                        this.mText.fontSize = fontSize;
+                        return  this.mText.fontSize;
+                    };
+
+                    this.getFontSize = function ()
+                    {
+                        return this.mText.fontSize;
+                    };
+
+                    this.setAlign = function (align)
+                    {
+                        this.mText.align = align;
+                        return  this.mText.align;
+                    };
+
+                    this.getAlign = function ()
+                    {
+                        return this.mText.align;
+                    };
+
+                    this.setFill = function (fill)
+                    {
+                        this.mText.fill = fill;
+                        return  this.mText.fill;
+                    };
+
+                    this.getFill = function ()
+                    {
+                        return this.mText.fill;
+                    };
+
+                    return this;
+                }
+
+
 
 //Abstraced Spiders Lib************************END******************************
-
 
 //Phaser BrickBreaker**************************START****************************
                 function preload() {
