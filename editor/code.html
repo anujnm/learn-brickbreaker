@@ -279,15 +279,6 @@
             box-shadow: 0px 0px 10px #000000;
         }
 
-        .modal-content {
-            height: 800px;
-            width: 1000px;
-        }
-
-        .modal-dialog {
-            width: 1000px;
-        }
-
         .iframe-modal-content {
             height: 800px;
             width: 1000px;
@@ -414,7 +405,7 @@
 	</textarea>
 
         <div class="right_menu">
-            <img src="img/run.png" id="Compile" title="Run" class="right_menu_item" data-toggle="modal" data-target=".modal" style="display: block;" />
+            <img src="img/run.png" id="Compile" title="Run" class="right_menu_item" data-toggle="modal" data-target=".modal.iframe-modal" style="display: block;" />
             <img src="img/reset.png" id="btnReset" title="Reset" class="right_menu_item" onclick="resetEditor()" style="display: block;" />
             <img src="img/info.png" id="btnInfo" title="More infomation" class="right_menu_item" onclick="openInfo()" style="display: block;" />
         </div>
@@ -431,10 +422,10 @@
         </nav>
 
 
-        <div class="modal fade">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-body">
+        <div class="modal fade iframe-modal">
+            <div class="modal-dialog iframe-modal-dialog">
+                <div class="modal-content iframe-modal-content">
+                    <div class="modal-body iframe-modal-body">
                         <div id="output_div" class="output_div">
                             <iframe id="output_iframe" name="output_iframe" class="output_iframe"></iframe>
                         </div>
