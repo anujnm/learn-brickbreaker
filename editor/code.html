@@ -4,9 +4,12 @@
     <title>CuriousCoderz</title>
     <link rel="stylesheet" href="style/codemirror.css">
     <!--<link rel="stylesheet" href="http://codemirror.net/theme/monokai.css">-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
 
     <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
     <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 
     <script src="js/utils.js"></script>
     <script src="js/codemirror.js"></script>
@@ -67,15 +70,12 @@
             }
 
             $('#output_iframe').attr('src', "../phaser/lessons" + lesson + ".html");
-
-            $('a.various').on("click", function () {
-                compile();
-            });
+	    $('.modal').on('show.bs.modal', function() {
+		compile();
+	    }); 	    
         });
 
-
         function compile() {
-            debugger;
 
             var user_javascript_text = "<script> " + $("#user_javascript").val() + "<\/script>";
             $(".output_iframe").contents().find("body").append(user_javascript_text);
@@ -86,18 +86,6 @@
         }
 
         function init_fancybox() {
-
-            $(".various").fancybox({
-                maxWidth: 800,
-                maxHeight: 600,
-                fitToView: false,
-                width: '70%',
-                height: '70%',
-                autoSize: false,
-                closeClick: false,
-                openEffect: 'none',
-                closeEffect: 'none'
-            });
 
         }
 
@@ -157,14 +145,18 @@
 
         .output_iframe {
             border: 1px solid #f8f8f2;
-            height: 90%;
-            max-height: 90%;
-            width: 48% !important;
-            float: right;
-            margin-right: 2px;
+            height: 620px;
+            max-height: 620px;
+            width: 820px;
+            margin-right: auto;
             display: none;
+	    margin-left: auto;
         }
-
+	.output_div {
+		width: 800px;
+		margin-left: auto;
+		margin-right: auto;
+	}
         h1 {
             color: white;
             font-size: 40px;
@@ -175,7 +167,13 @@
             -webkit-box-shadow: 0px 0px 10px #000000;
             box-shadow: 0px 0px 10px #000000;
         }
-
+	.modal-content {
+		height: 800px;
+		width: 1000px;
+	}
+	.modal-dialog {
+		width:1000px;
+	}
         .dt {
             background: rgba(128, 128, 128,0.5);
             border-bottom: 1px solid #c5c5c5;
@@ -261,16 +259,24 @@
 	</textarea>
 
 
-        <div style="display: inline-block; vertical-align: top; margin: auto"">
-            <a class="various" href="#output_div">Iframe</a>
-            <button id="Compile" onclick="compile()" style="display: block; vertical-align: top; margin: auto;background: url(img/run.png) no-repeat;">Run</button>
+        <div style="display: inline-block; vertical-align: top; margin: auto">
+            <button id="Compile" data-toggle="modal" data-target=".modal" style="display: block; vertical-align: top; margin: auto;background: url(img/run.png) no-repeat;">Run</button>
             <button id="btnReset" onclick="resetEditor()" style="display: block; vertical-align: top; margin: auto">Reset</button>
         </div>
 
 
-        <div id="output_div">
-            <iframe id="output_iframe" name="output_iframe" class="output_iframe"></iframe>
-        </div>
+	<div class="modal fade">
+ 	 <div class="modal-dialog">
+	<div class="modal-content">   	
+	<div class="modal-body">
+     		<div id="output_div" class="output_div">
+			<iframe id="output_iframe" name="output_iframe" class="output_iframe"></iframe>
+		</div>
+
+	</div>
+   	 </div><!-- /.modal-content -->
+ 	 </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
     </div>
 
 
