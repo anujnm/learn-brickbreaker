@@ -31,8 +31,8 @@
         var frame, contents, body_compile, goal_open;
         var lesson = getUrlParameter('lesson');
         var cm;
-        var predifined_js = "".concat('function onCreate() {\n \n } \n', " function onUpdate() {\n \n } \n");
-
+        var predifined_js = getPredifinedCode(lesson);
+        alert(predifined_js);
         $(window).load(function () {
 
             init_accordian();
@@ -152,6 +152,8 @@
                 }
             });
         }
+
+
         function compile() {
 
             var user_javascript_text = "<script> " + $("#user_javascript").val() + "<\/script>";
@@ -160,7 +162,6 @@
             window.frames['output_iframe'].startGame();
             $(".output_iframe").show();
             parse_save_js(user_javascript_text);
-
 
         }
 
@@ -199,8 +200,6 @@
 
             // On "mouseenter" slide down current dd, slideup all other dd "siblings" 
             $(".dl").on("click", ".dt", function () {
-
-
                 if (!goal_open) {
                     goal_open = true;
                     $("#arrow").attr("src", "img/arrow_up.png");
