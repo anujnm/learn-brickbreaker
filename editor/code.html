@@ -20,13 +20,10 @@
     <script src="hint/anyword-hint.js"></script>
 
     <script src="hint/javascript-hint.js"></script>
-    <link rel="stylesheet" href="fancybox/jquery.fancybox.css" />
-    <script src="fancybox/jquery.fancybox.js"></script>
-    <script src="fancybox/jquery.fancybox.pack.js"></script>
+    <script src="js/slidemenu/classie.js"></script>
+    <link href="style/slidemenu/component.css" rel="stylesheet" />
+    <link href="style/slidemenu/default.css" rel="stylesheet" />
 
-    <script type="text/javascript">        
-        
-    </script>
 
 
 
@@ -64,6 +61,8 @@
 
 
         function init_codemirror() {
+
+
             $("#user_javascript").html(predifined_js);
 
             var editor_text_area = $("#user_javascript");
@@ -87,6 +86,8 @@
             }
 
         }
+
+
         function init_accordian() {
 
             // Script to show the first dd element  
@@ -113,17 +114,25 @@
 
 
 
-
-
         }
 
         function resetEditor() {
             cm.setValue(predifined_js);
             cm.clearHistory();
+        }
+        function openInfo() {
 
-            //$("#user_javascript").html(predifined_js);
+            var menuRight = document.getElementById('cbp-spmenu-s2'),
+             btnInfo = document.getElementById('btnInfo');
+            classie.toggle(menuRight, 'cbp-spmenu-open');
+            classie.toggle(btnInfo, 'active');
+
         }
 
+        function toggleRightSlide() {
+            $("#cbp-spmenu-s2").removeClass("cbp-spmenu-open")
+
+        }
     </script>
     <style>
         body {
@@ -137,7 +146,7 @@
             border: 1px solid #eee;
             height: auto;
             line-height: 1.5;
-            width: 45% !important;
+            width: 92% !important;
             display: inline-block;
         }
 
@@ -226,6 +235,29 @@
             max-height: 85%;
         }
 
+        .right_menu {
+            display: inline-block;
+            vertical-align: top;
+            margin: auto;
+            height: 100%;
+            background-color: rgba(128, 128, 128,0.5);
+            float: right;
+            width: 5%;
+            padding: 0px 10px;
+        }
+
+        .right_menu_item {
+            margin: 10px 0px 0px 0px;
+            padding: 4px;
+            background: rgba(187, 187, 187,0.5);
+            width: 100%;
+            min-width: 100%;
+            border: none;
+            font-size: 0.7em;
+            height: auto;
+            cursor: hand;
+        }
+
         /*.CodeMirror-hints {
             background-color: red;
         }
@@ -238,16 +270,19 @@
             background-color: blue;
             color: yellow;
         }*/
+        .slide_title {
+            background: rgba(128, 128, 128,0.9) !important;
+        }
     </style>
 
 </head>
 <body>
 
-
     <div id="top_bars">
         <dl class="dl">
             <dt class="dt">Who stared in the Invisible Boy? 
-            <img class="arrow" id="arrow" src="img/arrow_down.png" style="float: right"></dt>
+               <!-- <img class="arrow" id="arrow" src="img/arrow_down.png" style="float: right">-->
+            </dt>
             <dd class="dd">Roby, The Robot </dd>
         </dl>
     </div>
@@ -261,11 +296,22 @@
         <textarea id="user_javascript" rows="20" cols="40" style="height: 85%; max-height: 85%; display: inline-block"> 
 	</textarea>
 
-
-        <div style="display: inline-block; vertical-align: top; margin: auto">
-            <button id="Compile" data-toggle="modal" data-target=".modal" style="display: block; vertical-align: top; margin: auto; background: url(img/run.png) no-repeat;">Run</button>
-            <button id="btnReset" onclick="resetEditor()" style="display: block; vertical-align: top; margin: auto">Reset</button>
+        <div class="right_menu">
+            <img src="img/run.png" id="Compile" title="Run" class="right_menu_item" data-toggle="modal" data-target=".modal" style="display: block;" />
+            <img src="img/reset.png" id="btnReset" title="Reset" class="right_menu_item" onclick="resetEditor()" style="display: block;" />
+            <img src="img/info.png" id="btnInfo" title="More infomation" class="right_menu_item" onclick="openInfo()" style="display: block;" />
         </div>
+
+        <nav class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-right" id="cbp-spmenu-s2">
+
+            <img src="img/arrow_right.png" style="padding: 5px; cursor: hand" onclick="toggleRightSlide()">
+            <dl class="dl">
+                <dt class="dt">
+                Information
+            </dl>
+            <div>
+            </div>
+        </nav>
 
 
         <div class="modal fade">
