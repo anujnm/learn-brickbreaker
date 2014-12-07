@@ -10,8 +10,10 @@
 
         <script type="text/javascript">
 
-
             window.onload = function () {
+
+                var score;
+                var scoreGUIText;
                 var brickList;
                 var ballList;
                 var ball;
@@ -22,6 +24,7 @@
                 var BRICK_TYPE_ORANGE = 2;
                 var BRICK_TYPE_RED = 3;
                 var BRICK_TYPE_GREEN = 4;
+
                 var starfield;
                 var game = new Phaser.Game(800, 600, Phaser.AUTO, 'game_canvas', {preload: preload, create: create, update: update});
 
@@ -583,6 +586,7 @@
 
                 function create() {
 
+
                     game.physics.startSystem(Phaser.Physics.ARCADE);
 
                     //  We check bounds collisions against all walls other than the bottom one
@@ -590,11 +594,15 @@
 
                     starfield = game.add.tileSprite(0, 0, 800, 600, 'starfield');
 
+                    paddleList = new PaddleList();
+                    ballList = new BallList();
+                    brickList = new BrickList();
 
                     onCreate();
                 }
 
                 function update() {
+
                     onUpdate();
 
                     if (ball.getY() > game.world.height + 10)
@@ -609,36 +617,117 @@
 
 //user code**********************START******************************************
                 function onCreate() {
-                    paddleList = new PaddleList();
+
+                    // create and set paddle
                     paddle = paddleList.addPaddle();
                     paddle.setX(game.world.centerX)
                     paddle.setY(550);
 
-
-                    ballList = new BallList();
+                    // create and set ball
                     ball = ballList.addBall(game.world.centerX, 500)
-
                     ball.setVelocityY(-300);
                     ball.setVelocityX(-75);
                     ball.playSpinAnimation();
 
 
-                    brickList = new BrickList();
-                    for (var x = 0; x < 15; x++)
+                    // setup bricks
+                    for (var y = 0; y < 4; y++)
                     {
-                        brickList.addBrick(120 + (x * 36), 152);
+                        for (var x = 0; x < 15; x++)
+                        {
+                            var brick = brickList.addBrick(120 + (x * 36), 100 + (y * 52));
+                            switch (y) {
+                                case 0:
+                                    brick.setType(BRICK_TYPE_RED);
+                                    break;
+                                case 1:
+                                    brick.setType(BRICK_TYPE_GREEN);
+                                    break;
+                                case 2:
+                                    brick.setType(BRICK_TYPE_ORANGE);
+                                    break;
+                                case 3:
+                                    brick.setType(BRICK_TYPE_BLUE);
+                                    break;
+                            }
+                        }
                     }
+
+                    score = 0;
+                    scoreGUIText = new GUIText();
+                    scoreGUIText.setAlign("left");
+
+                    scoreGUIText.setX(5);
+                    scoreGUIText.setY(5);
+
                 }
 
                 function onUpdate() {
+
+                    // handle paddle movement
                     if (game.input.keyboard.isDown(Phaser.Keyboard.LEFT))
                     {
-                        paddle.setX(paddle.getX() - 5);  // -5 here is the speed
+                        paddle.setX(paddle.getX() - 8);  // -8 here is the speed
                     }
                     else if (game.input.keyboard.isDown(Phaser.Keyboard.RIGHT))
                     {
-                        paddle.setX(paddle.getX() + 5); // -5 here is the speed
+                        paddle.setX(paddle.getX() + 8); // -8 here is the speed
                     }
+
+
+                    // reset ball just for debugging easier :)
+                    if (game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
+                    {
+                        ball.setX(game.world.centerX);
+                        ball.setY(500);
+                        ball.setVelocityY(-300);
+                        ball.setVelocityX(-75);
+                    }
+
+
+                    // handle paddle collision
+                    if (ball.isCollided(paddle))
+                    {
+                        paddle.reflect(ball);
+                    }
+
+
+                    // handle bricks collision
+                    var totalBricks = brickList.length();
+                    var brickIndexToRemove = -1;
+                    for (var i = 0; i < totalBricks; i++) {
+                        var brick = brickList.get(i);
+                        if (ball.isCollided(brick))
+                        {
+                            switch (brick.getType()) {
+                                case BRICK_TYPE_RED:
+                                    score += 100;
+                                    break;
+                                case BRICK_TYPE_GREEN:
+                                    score += 60;
+                                    break;
+                                case BRICK_TYPE_ORANGE:
+                                    score += 30;
+                                    break;
+                                case BRICK_TYPE_BLUE:
+                                    score += 10;
+                                    break;
+                            }
+
+                            brickIndexToRemove = i;
+                            brick.destroy();
+                            break;
+                        }
+                    }
+
+                    // remove brick from brick list
+                    if (brickIndexToRemove >= 0)
+                    {
+                        brickList.remove(brickIndexToRemove);
+                    }
+
+                    scoreGUIText.setText("Score: " + score);
+
                 }
 //user code*************************END*****************************************                
             };
