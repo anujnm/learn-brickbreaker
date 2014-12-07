@@ -23,13 +23,8 @@
     <link rel="stylesheet" href="fancybox/jquery.fancybox.css"/>
     <script src="fancybox/jquery.fancybox.js"></script>
     <script src="fancybox/jquery.fancybox.pack.js"></script>
-    
-    <script type="text/javascript">        
+    <script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.3.2.min.js"></script>    
         
-    </script>
-
-
-
     <script type="text/javascript">
 
         var frame, contents, body_compile, goal_open;
@@ -70,18 +65,43 @@
             }
 
             $('#output_iframe').attr('src', "../phaser/lessons" + lesson + ".html");
-	    $('.modal').on('show.bs.modal', function() {
+	    $('.modal.iframe-modal').on('show.bs.modal', function() {
 		compile();
 	    }); 	    
-        });
+	});
+	function parse_signup() {
+        	Parse.initialize("czqt5B1wAcwB03VCL0Povn19BlSO4u1OShrVuCue", "zWNK5ZsVPiQtlippORub9widCFvpJQ22auiHOYNE");
+      		var user = new Parse.User();
+        	user.set("username", $('form[name="signup"] input[name="userid"]').val());
+        	user.set("password", $('form[name="signup"] input[name="password"]').val());
+        	user.set("email", $('form[name="signup"] input[name="Email"]').val());
 
-        function compile() {
+        	// other fields can be set just like with Parse.Object
+        	user.set("phone", "415-392-0202");
+
+        	user.signUp(null, {
+            	success: function (user) {
+			if (user.attributes.hasOwnProperty('usernmae')) {
+				$('button.sign-up-btn').text('Welcome' + user.attributes['username']);
+			} else {
+		 		$('button.sign-up-btn').text('Welcome');
+			}
+			$('.modal').modal('hide');	
+            	},
+            	error: function (user, error) {
+                	// Show the error message somewhere and let the user try again.
+                	alert("Error: " + error.code + " " + error.message);
+            	}
+        	});
+    	}        
+	function compile() {
 
             var user_javascript_text = "<script> " + $("#user_javascript").val() + "<\/script>";
             $(".output_iframe").contents().find("body").append(user_javascript_text);
             window.frames['output_iframe'].unLoadGame();
             window.frames['output_iframe'].startGame();
             $(".output_iframe").show();
+	    
 
         }
 
@@ -167,11 +187,11 @@
             -webkit-box-shadow: 0px 0px 10px #000000;
             box-shadow: 0px 0px 10px #000000;
         }
-	.modal-content {
+	.iframe-modal-content {
 		height: 800px;
 		width: 1000px;
 	}
-	.modal-dialog {
+	.iframe-modal-dialog {
 		width:1000px;
 	}
         .dt {
@@ -239,12 +259,15 @@
 
 </head>
 <body>
-
-
+	<div style='height:60px;'>
+	<button class="btn btn-primary btn-lg sign-up-btn" href="#signup" style='float:right;' data-toggle="modal" data-target=".bs-modal-sm">Sign In/Register</button>
+	</div>
     <div id="top_bars">
         <dl class="dl">
-            <dt class="dt">Who stared in the Invisible Boy? 
-            <img class="arrow" id="arrow" src="img/arrow_down.png" style="float: right"></dt>
+            <dt class="dt">
+		<span style='float:right;'>Who stared in the Invisible Boy?</span>
+                <img class="arrow" id="arrow" src="img/arrow_down.png" style="display:inline-block;">
+	    </dt>
             <dd class="dd">Roby, The Robot </dd>
         </dl>
     </div>
@@ -260,15 +283,15 @@
 
 
         <div style="display: inline-block; vertical-align: top; margin: auto">
-            <button id="Compile" data-toggle="modal" data-target=".modal" style="display: block; vertical-align: top; margin: auto;background: url(img/run.png) no-repeat;">Run</button>
+            <button id="Compile" data-toggle="modal" data-target=".modal.iframe-modal" style="display: block; vertical-align: top; margin: auto;background: url(img/run.png) no-repeat;">Run</button>
             <button id="btnReset" onclick="resetEditor()" style="display: block; vertical-align: top; margin: auto">Reset</button>
         </div>
 
 
-	<div class="modal fade">
- 	 <div class="modal-dialog">
-	<div class="modal-content">   	
-	<div class="modal-body">
+	<div class="modal fade iframe-modal">
+ 	 <div class="modal-dialog iframe-modal-dialog">
+	<div class="modal-content iframe-modal-content">   	
+	<div class="modal-body iframe-modal-body">
      		<div id="output_div" class="output_div">
 			<iframe id="output_iframe" name="output_iframe" class="output_iframe"></iframe>
 		</div>
@@ -278,7 +301,101 @@
  	 </div><!-- /.modal-dialog -->
 	</div><!-- /.modal -->
     </div>
+<div class="modal fade bs-modal-sm" id="myModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <br>
+                <div class="bs-example bs-example-tabs">
+                    <ul id="myTab" class="nav nav-tabs">
+                        <li class="active"><a href="#signin" data-toggle="tab">Sign In</a></li>
+                        <li class=""><a href="#signup" data-toggle="tab">Register</a></li>
+                    </ul>
+                </div>
+                <div class="modal-body">
+                    <div id="myTabContent" class="tab-content">
+                        <div class="tab-pane fade in" id="why">
+                            <p>We need this information so that you can receive access to the site and its content. Rest assured your information will not be sold, traded, or given to anyone.</p>
+                            <p></p><br> Please contact <a mailto:href="JoeSixPack@Sixpacksrus.com"></a>JoeSixPack@Sixpacksrus.com</a> for any other inquiries.</p>
+                        </div>
+                        <div class="tab-pane fade active in" id="signin">
+                            <form name="signin" class="form-horizontal">
+                                <fieldset>
+                                    <!-- Sign In Form -->
+                                    <!-- Text input-->
+                                    <div class="control-group">
+                                        <label class="control-label" for="userid">Alias:</label>
+                                        <div class="controls">
+                                            <input required="" id="userid" name="userid" type="text" class="form-control" placeholder="JoeSixpack" class="input-medium" required="">
+                                        </div>
+                                    </div>
 
+                                    <!-- Password input-->
+                                    <div class="control-group">
+                                        <label class="control-label" for="passwordinput">Password:</label>
+                                        <div class="controls">
+                                            <input required="" id="passwordinput" name="passwordinput" class="form-control" type="password" placeholder="********" class="input-medium">
+                                        </div>
+                                    </div>
+
+                                    <!-- Button -->
+                                    <div class="control-group">
+                                        <label class="control-label" for="signin"></label>
+                                        <div class="controls">
+                                            <button id="signin" name="signin" class="btn btn-success">Sign In</button>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </form>
+                        </div>
+                        <div class="tab-pane fade" id="signup">
+                            <form name="signup" class="form-horizontal">
+                                <fieldset>
+                                    <!-- Sign Up Form -->
+                                    <!-- Text input-->
+                                    <div class="control-group">
+                                        <label class="control-label" for="Email">Email:</label>
+                                        <div class="controls">
+                                            <input id="Email" name="Email" class="form-control" type="text" placeholder="JoeSixpack@sixpacksrus.com" class="input-large" required="">
+                                        </div>
+                                    </div>
+
+                                    <!-- Text input-->
+                                    <div class="control-group">
+                                        <label class="control-label" for="userid">Alias:</label>
+                                        <div class="controls">
+                                            <input id="userid" name="userid" class="form-control" type="text" placeholder="JoeSixpack" class="input-large" required="">
+                                        </div>
+                                    </div>
+
+                                    <!-- Password input-->
+                                    <div class="control-group">
+                                        <label class="control-label" for="password">Password:</label>
+                                        <div class="controls">
+                                            <input id="password" name="password" class="form-control" type="password" placeholder="********" class="input-large" required="">
+                                            <em>1-8 Characters</em>
+                                        </div>
+                                    </div>
+
+                                    <!-- Button -->
+                                    <div class="control-group">
+                                        <label class="control-label" for="confirmsignup"></label>
+                                        <div class="controls">
+                                            <button type="button" onclick="parse_signup()" id="confirmsignup" name="confirmsignup" class="btn btn-success">Sign Up</button>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <center>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </center>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </body>
 
