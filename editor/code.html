@@ -32,7 +32,8 @@
         var lesson = getUrlParameter('lesson');
         var cm;
         var predifined_js = getPredifinedCode(lesson);
-        alert(predifined_js);
+        var lesson_title = getLessonTitle(lesson);
+        var lesson_info = getLessonInfo(lesson);
         $(window).load(function () {
 
             init_accordian();
@@ -41,6 +42,40 @@
             frame = $('#output_iframe'),
             contents = frame.contents(),
             body_compile = contents.find('body');
+
+
+            $('#lesson_title').html(lesson_title);
+            $('#lesson_info').html(lesson_info);
+
+            if (parseInt(lesson) < 4) {
+
+                $("#btnNext").on("click", function () {
+
+                    var n = (BASE_URL + "editor/code.html?lesson=" + (parseInt(lesson) + 1));
+
+                    location = n;
+
+                });
+
+
+            } else {
+                $("#btnNext").hide();
+            }
+
+            if (parseInt(lesson) > 1) {
+
+                $("#btnPrev").on("click", function () {
+
+                    var n = (BASE_URL + "editor/code.html?lesson=" + (parseInt(lesson) - 1));
+
+                    location = n;
+
+                });
+
+
+            } else {
+                $("#btnPrev").hide();
+            }
 
             $('#output_iframe').attr('src', "../phaser/lessons" + lesson + ".html");
             $('.modal').on('show.bs.modal', function () {
@@ -202,13 +237,15 @@
             $(".dl").on("click", ".dt", function () {
                 if (!goal_open) {
                     goal_open = true;
-                    $("#arrow").attr("src", "img/arrow_up.png");
-                    $(this).next().slideDown(200).siblings(".dd").slideUp(200);
-                    //$(this).siblings(".dt #arrow").attr("src", "img/arrow_up.png");
+                    openInfo();
+                    // $("#arrow").attr("src", "img/arrow_up.png");
+                    // $(this).next().slideDown(200).siblings(".dd").slideUp(200);
+
                 } else {
                     goal_open = false;
-                    $("#arrow").attr("src", "img/arrow_down.png");
-                    $(this).next().slideUp(200).siblings(".dd").slideUp(200);
+                    toggleRightSlide();
+                    // $("#arrow").attr("src", "img/arrow_down.png");
+                    // $(this).next().slideUp(200).siblings(".dd").slideUp(200);
                 }
 
             });
@@ -299,7 +336,7 @@
         }
 
             .dt:first-child {
-                border-top: none;
+                border: none;
             }
 
             .dt:nth-last-child(2) {
@@ -374,6 +411,17 @@
         .slide_title {
             background: rgba(128, 128, 128,0.9) !important;
         }
+
+        #lesson_info {
+            padding: 10px;
+            overflow-y: scroll;
+            font-size: small;
+            line-height: 1.5em;
+            height: 90%;
+            max-height: 90%;
+            white-space: pre-wrap;
+            display: block;
+        }
     </style>
 
 </head>
@@ -382,11 +430,14 @@
 
     <div style='height: 5%;'>
         <button class="btn btn-primary btn-sm sign-up-btn" href="#signup" style='float: right; margin-right: 20px;' data-toggle="modal" data-target=".bs-modal-sm">Sign In/Register</button>
+        <button class="btn btn-primary btn-sm sign-up-btn" id="btnNext" href="" style='float: right; margin-right: 20px;'>Next</button>
+        <button class="btn btn-primary btn-sm sign-up-btn" id="btnPrev" href="" style='float: right; margin-right: 20px;'>Prev</button>
     </div>
+
 
     <div id="top_bars">
         <dl class="dl">
-            <dt class="dt">Who stared in the Invisible Boy? 
+            <dt class="dt" id="lesson_title">Who stared in the Invisible Boy? 
                <!-- <img class="arrow" id="arrow" src="img/arrow_down.png" style="float: right">-->
             </dt>
         </dl>
@@ -412,11 +463,8 @@
         <nav class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-right" id="cbp-spmenu-s2">
 
             <img src="img/arrow_right.png" style="padding: 5px; cursor: hand" onclick="toggleRightSlide()">
-            <dl class="dl">
-                <dt class="dt">
-                Information
-            </dl>
-            <div>
+
+            <div id="lesson_info">
             </div>
         </nav>
 

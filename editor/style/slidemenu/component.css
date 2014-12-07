@@ -33,7 +33,8 @@
 
 .cbp-spmenu-vertical {
     width: 240px;
-    height: 100%;
+    height: 900px;
+    min-height: 100%;
     top: 0;
     z-index: 1000;
 }
