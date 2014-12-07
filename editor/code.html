@@ -1,6 +1,5 @@
 ﻿﻿<html>
 <head>
-
     <title>CuriousCoderz</title>
     <link rel="stylesheet" href="style/codemirror.css">
     <!--<link rel="stylesheet" href="http://codemirror.net/theme/monokai.css">-->
@@ -20,21 +19,13 @@
     <script src="hint/anyword-hint.js"></script>
 
     <script src="hint/javascript-hint.js"></script>
-<<<<<<< HEAD
+
     <script src="js/slidemenu/classie.js"></script>
     <link href="style/slidemenu/component.css" rel="stylesheet" />
     <link href="style/slidemenu/default.css" rel="stylesheet" />
+    <script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.3.2.min.js"></script>
 
 
-
-
-=======
-    <link rel="stylesheet" href="fancybox/jquery.fancybox.css"/>
-    <script src="fancybox/jquery.fancybox.js"></script>
-    <script src="fancybox/jquery.fancybox.pack.js"></script>
-    <script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.3.2.min.js"></script>    
-        
->>>>>>> 940f212398e2718bbab42bb318f4ebca60f15eb3
     <script type="text/javascript">
 
         var frame, contents, body_compile, goal_open;
@@ -93,112 +84,111 @@
                 CodeMirror.showHint(cm, CodeMirror.hint.javascript);
             }
 
-<<<<<<< HEAD
-=======
-            $('#output_iframe').attr('src', "../phaser/lessons" + lesson + ".html");
-	    $('.modal.iframe-modal').on('show.bs.modal', function() {
-		compile();
-	    }); 	    
-	});
-	function parse_signup() {
-        	Parse.initialize("czqt5B1wAcwB03VCL0Povn19BlSO4u1OShrVuCue", "zWNK5ZsVPiQtlippORub9widCFvpJQ22auiHOYNE");
-      		var user = new Parse.User();
-        	user.set("username", $('form[name="signup"] input[name="userid"]').val());
-        	user.set("password", $('form[name="signup"] input[name="password"]').val());
-        	user.set("email", $('form[name="signup"] input[name="Email"]').val());
 
-        	// other fields can be set just like with Parse.Object
-        	user.set("phone", "415-392-0202");
 
-        	user.signUp(null, {
-            	success: function (user) {
-			if (user.attributes.hasOwnProperty('username')) {
-				$('button.sign-up-btn').text('Welcome, ' + user.attributes['username']);
-			} else {
-		 		$('button.sign-up-btn').text('Welcome');
-			}
-			$('input[name="parse_userid"]').val(user.id);
-			$('.modal').modal('hide');	
-            	},
-            	error: function (user, error) {
-                	// Show the error message somewhere and let the user try again.
-                	alert("Error: " + error.code + " " + error.message);
-            	}
-        	});
-    	} 
-	function parse_signin() {
-		Parse.initialize("czqt5B1wAcwB03VCL0Povn19BlSO4u1OShrVuCue", "zWNK5ZsVPiQtlippORub9widCFvpJQ22auiHOYNE");
-		var id = $('form[name="signin"] input[name="userid"]').val();
-		var password = $('form[name="signin"] input[name="passwordinput"]').val();
-		Parse.User.logIn(id, password, {
-			success: function(user) {
-				if (user.attributes.hasOwnProperty('username')) {
-					$('button.sign-up-btn').text('Welcome, ' + user.attributes['username']);
-				} else {
-		 			$('button.sign-up-btn').text('Welcome');
-				}
-				$('input[name="parse_userid"]').val(user.id);
-				$('.modal').modal('hide');
-				var UserJS = Parse.Object.extend('UserJS');
-				var query = new Parse.Query(UserJS);
-				query.equalTo('userId', user.id);
-				query.equalTo('lesson', getUrlParameter('lesson'));
-				query.find({
-					success:function(results) {
-						debugger;
-						//$('.output_iframe').contents().find('body').append(results[0].attributes.js);
-					}
-				});
-			},
-			error: function(user, error) {
-				alert("Error: " + error.code + " " + error.message);
-			}
-		});
-	}       
-	function compile() {
+
+
+        }
+
+
+
+        function parse_signup() {
+            Parse.initialize("czqt5B1wAcwB03VCL0Povn19BlSO4u1OShrVuCue", "zWNK5ZsVPiQtlippORub9widCFvpJQ22auiHOYNE");
+            var user = new Parse.User();
+            user.set("username", $('form[name="signup"] input[name="userid"]').val());
+            user.set("password", $('form[name="signup"] input[name="password"]').val());
+            user.set("email", $('form[name="signup"] input[name="Email"]').val());
+
+            // other fields can be set just like with Parse.Object
+            user.set("phone", "415-392-0202");
+
+            user.signUp(null, {
+                success: function (user) {
+                    if (user.attributes.hasOwnProperty('username')) {
+                        $('button.sign-up-btn').text('Welcome, ' + user.attributes['username']);
+                    } else {
+                        $('button.sign-up-btn').text('Welcome');
+                    }
+                    $('input[name="parse_userid"]').val(user.id);
+                    $('.modal').modal('hide');
+                },
+                error: function (user, error) {
+                    // Show the error message somewhere and let the user try again.
+                    alert("Error: " + error.code + " " + error.message);
+                }
+            });
+        }
+        function parse_signin() {
+            Parse.initialize("czqt5B1wAcwB03VCL0Povn19BlSO4u1OShrVuCue", "zWNK5ZsVPiQtlippORub9widCFvpJQ22auiHOYNE");
+            var id = $('form[name="signin"] input[name="userid"]').val();
+            var password = $('form[name="signin"] input[name="passwordinput"]').val();
+            Parse.User.logIn(id, password, {
+                success: function (user) {
+                    if (user.attributes.hasOwnProperty('username')) {
+                        $('button.sign-up-btn').text('Welcome, ' + user.attributes['username']);
+                    } else {
+                        $('button.sign-up-btn').text('Welcome');
+                    }
+                    $('input[name="parse_userid"]').val(user.id);
+                    $('.modal').modal('hide');
+                    var UserJS = Parse.Object.extend('UserJS');
+                    var query = new Parse.Query(UserJS);
+                    query.equalTo('userId', user.id);
+                    query.equalTo('lesson', getUrlParameter('lesson'));
+                    query.find({
+                        success: function (results) {
+                            debugger;
+                            if (results) {
+                                predifined_js = results;
+                                cm.setValue(results);
+                                cm.clearHistory();
+                            }
+                            //$('.output_iframe').contents().find('body').append(results[0].attributes.js);
+                        }
+                    });
+                },
+                error: function (user, error) {
+                    alert("Error: " + error.code + " " + error.message);
+                }
+            });
+        }
+        function compile() {
 
             var user_javascript_text = "<script> " + $("#user_javascript").val() + "<\/script>";
             $(".output_iframe").contents().find("body").append(user_javascript_text);
             window.frames['output_iframe'].unLoadGame();
             window.frames['output_iframe'].startGame();
             $(".output_iframe").show();
-	    parse_save_js(user_javascript_text);    
-	
->>>>>>> 940f212398e2718bbab42bb318f4ebca60f15eb3
-        }
-	
-	function parse_save_js(user_js) {
-		Parse.initialize("czqt5B1wAcwB03VCL0Povn19BlSO4u1OShrVuCue", "zWNK5ZsVPiQtlippORub9widCFvpJQ22auiHOYNE");
-		var UserJS = Parse.Object.extend('UserJS');
-		var userJS = new UserJS();
-		var parse_userid = $('input[name="parse_userid"]').val();
-		if (parse_userid) {
-			userJS.set('userId', parse_userid);
-			userJS.set('js', user_js);
-			userJS.set('lesson', getUrlParameter('lesson'));
-			userJS.save();
-		}
-	}
+            parse_save_js(user_javascript_text);
 
-<<<<<<< HEAD
-=======
-	function getUrlParameter(sParam)
-	{
-    		var sPageURL = window.location.search.substring(1);
-    		var sURLVariables = sPageURL.split('&');
-    		for (var i = 0; i < sURLVariables.length; i++) 
-    		{
-        		var sParameterName = sURLVariables[i].split('=');
-        		if (sParameterName[0] == sParam) 
-        		{
-            		return sParameterName[1];
-        		}
-    		}	
-	}
-        function init_fancybox() {
 
         }
->>>>>>> 940f212398e2718bbab42bb318f4ebca60f15eb3
+
+        function parse_save_js(user_js) {
+            Parse.initialize("czqt5B1wAcwB03VCL0Povn19BlSO4u1OShrVuCue", "zWNK5ZsVPiQtlippORub9widCFvpJQ22auiHOYNE");
+            var UserJS = Parse.Object.extend('UserJS');
+            var userJS = new UserJS();
+            var parse_userid = $('input[name="parse_userid"]').val();
+            if (parse_userid) {
+                userJS.set('userId', parse_userid);
+                userJS.set('js', user_js);
+                userJS.set('lesson', getUrlParameter('lesson'));
+                userJS.save();
+            }
+        }
+
+
+        function getUrlParameter(sParam) {
+            var sPageURL = window.location.search.substring(1);
+            var sURLVariables = sPageURL.split('&');
+            for (var i = 0; i < sURLVariables.length; i++) {
+                var sParameterName = sURLVariables[i].split('=');
+                if (sParameterName[0] == sParam) {
+                    return sParameterName[1];
+                }
+            }
+        }
+
 
         function init_accordian() {
 
@@ -251,7 +241,7 @@
             background-image: url(http://subtlepatterns.com/patterns/dark_geometric.png);
             color: white;
             font-family: 'Fjalla One', sans-serif;
-            margin: 20px auto;
+            margin: 0px auto;
         }
 
         .CodeMirror {
@@ -288,7 +278,6 @@
             -webkit-box-shadow: 0px 0px 10px #000000;
             box-shadow: 0px 0px 10px #000000;
         }
-<<<<<<< HEAD
 
         .modal-content {
             height: 800px;
@@ -299,15 +288,15 @@
             width: 1000px;
         }
 
-=======
-	.iframe-modal-content {
-		height: 800px;
-		width: 1000px;
-	}
-	.iframe-modal-dialog {
-		width:1000px;
-	}
->>>>>>> 940f212398e2718bbab42bb318f4ebca60f15eb3
+        .iframe-modal-content {
+            height: 800px;
+            width: 1000px;
+        }
+
+        .iframe-modal-dialog {
+            width: 1000px;
+        }
+
         .dt {
             background: rgba(128, 128, 128,0.5);
             border-bottom: 1px solid #c5c5c5;
@@ -396,30 +385,24 @@
             background: rgba(128, 128, 128,0.9) !important;
         }
     </style>
-	<input type="hidden" name="parse_userid" />
+
 </head>
 <body>
-<<<<<<< HEAD
+    <input type="hidden" name="parse_userid" />
+
+    <div style='height: 5%;'>
+        <button class="btn btn-primary btn-sm sign-up-btn" href="#signup" style='float: right; margin-right: 20px;' data-toggle="modal" data-target=".bs-modal-sm">Sign In/Register</button>
+    </div>
 
     <div id="top_bars">
         <dl class="dl">
             <dt class="dt">Who stared in the Invisible Boy? 
                <!-- <img class="arrow" id="arrow" src="img/arrow_down.png" style="float: right">-->
             </dt>
-=======
-	<div style='height:60px;'>
-	<button class="btn btn-primary btn-lg sign-up-btn" href="#signup" style='float:right;margin-right:20px;' data-toggle="modal" data-target=".bs-modal-sm">Sign In/Register</button>
-	</div>
-    <div id="top_bars">
-        <dl class="dl">
-            <dt class="dt">
-		<span style='float:right;'>Who stared in the Invisible Boy?</span>
-                <img class="arrow" id="arrow" src="img/arrow_down.png" style="display:inline-block;">
-	    </dt>
->>>>>>> 940f212398e2718bbab42bb318f4ebca60f15eb3
-            <dd class="dd">Roby, The Robot </dd>
         </dl>
     </div>
+
+
 
 
 
@@ -430,7 +413,6 @@
         <textarea id="user_javascript" rows="20" cols="40" style="height: 85%; max-height: 85%; display: inline-block"> 
 	</textarea>
 
-<<<<<<< HEAD
         <div class="right_menu">
             <img src="img/run.png" id="Compile" title="Run" class="right_menu_item" data-toggle="modal" data-target=".modal" style="display: block;" />
             <img src="img/reset.png" id="btnReset" title="Reset" class="right_menu_item" onclick="resetEditor()" style="display: block;" />
@@ -464,124 +446,105 @@
             <!-- /.modal-dialog -->
         </div>
         <!-- /.modal -->
-=======
 
-        <div style="display: inline-block; vertical-align: top; margin: auto">
-            <button id="Compile" data-toggle="modal" data-target=".modal.iframe-modal" style="display: block; vertical-align: top; margin: auto;background: url(img/run.png) no-repeat;">Run</button>
-            <button id="btnReset" onclick="resetEditor()" style="display: block; vertical-align: top; margin: auto">Reset</button>
-        </div>
-
-
-	<div class="modal fade iframe-modal">
- 	 <div class="modal-dialog iframe-modal-dialog">
-	<div class="modal-content iframe-modal-content">   	
-	<div class="modal-body iframe-modal-body">
-     		<div id="output_div" class="output_div">
-			<iframe id="output_iframe" name="output_iframe" class="output_iframe"></iframe>
-		</div>
-
-	</div>
-   	 </div><!-- /.modal-content -->
- 	 </div><!-- /.modal-dialog -->
-	</div><!-- /.modal -->
->>>>>>> 940f212398e2718bbab42bb318f4ebca60f15eb3
-    </div>
-<div class="modal fade bs-modal-sm" id="myModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <br>
-                <div class="bs-example bs-example-tabs">
-                    <ul id="myTab" class="nav nav-tabs">
-                        <li class="active"><a href="#signin" data-toggle="tab">Sign In</a></li>
-                        <li class=""><a href="#signup" data-toggle="tab">Register</a></li>
-                    </ul>
-                </div>
-                <div class="modal-body">
-                    <div id="myTabContent" class="tab-content">
-                        <div class="tab-pane fade in" id="why">
-                            <p>We need this information so that you can receive access to the site and its content. Rest assured your information will not be sold, traded, or given to anyone.</p>
-                            <p></p><br> Please contact <a mailto:href="JoeSixPack@Sixpacksrus.com"></a>JoeSixPack@Sixpacksrus.com</a> for any other inquiries.</p>
-                        </div>
-                        <div class="tab-pane fade active in" id="signin">
-                            <form name="signin" class="form-horizontal">
-                                <fieldset>
-                                    <!-- Sign In Form -->
-                                    <!-- Text input-->
-                                    <div class="control-group">
-                                        <label class="control-label" for="userid">Alias:</label>
-                                        <div class="controls">
-                                            <input required="" id="userid" name="userid" type="text" class="form-control" placeholder="JoeSixpack" class="input-medium" required="">
+        <div class="modal fade bs-modal-sm" id="myModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <br>
+                    <div class="bs-example bs-example-tabs">
+                        <ul id="myTab" class="nav nav-tabs">
+                            <li class="active"><a href="#signin" data-toggle="tab">Sign In</a></li>
+                            <li class=""><a href="#signup" data-toggle="tab">Register</a></li>
+                        </ul>
+                    </div>
+                    <div class="modal-body">
+                        <div id="myTabContent" class="tab-content">
+                            <div class="tab-pane fade in" id="why">
+                                <p>We need this information so that you can receive access to the site and its content. Rest assured your information will not be sold, traded, or given to anyone.</p>
+                                <p></p>
+                                <br>
+                                Please contact <a mailto:href="JoeSixPack@Sixpacksrus.com"></a>JoeSixPack@Sixpacksrus.com</a> for any other inquiries.</p>
+                            </div>
+                            <div class="tab-pane fade active in" id="signin">
+                                <form name="signin" class="form-horizontal">
+                                    <fieldset>
+                                        <!-- Sign In Form -->
+                                        <!-- Text input-->
+                                        <div class="control-group">
+                                            <label class="control-label" for="userid">Alias:</label>
+                                            <div class="controls">
+                                                <input required="" id="userid" name="userid" type="text" class="form-control" placeholder="JoeSixpack" class="input-medium" required="">
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <!-- Password input-->
-                                    <div class="control-group">
-                                        <label class="control-label" for="passwordinput">Password:</label>
-                                        <div class="controls">
-                                            <input required="" id="passwordinput" name="passwordinput" class="form-control" type="password" placeholder="********" class="input-medium">
+                                        <!-- Password input-->
+                                        <div class="control-group">
+                                            <label class="control-label" for="passwordinput">Password:</label>
+                                            <div class="controls">
+                                                <input required="" id="passwordinput" name="passwordinput" class="form-control" type="password" placeholder="********" class="input-medium">
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <!-- Button -->
-                                    <div class="control-group">
-                                        <label class="control-label" for="signin"></label>
-                                        <div class="controls">
-                                            <button type="button" id="signin" onclick="parse_signin()" name="signin" class="btn btn-success">Sign In</button>
+                                        <!-- Button -->
+                                        <div class="control-group">
+                                            <label class="control-label" for="signin"></label>
+                                            <div class="controls">
+                                                <button type="button" id="signin" onclick="parse_signin()" name="signin" class="btn btn-success">Sign In</button>
+                                            </div>
                                         </div>
-                                    </div>
-                                </fieldset>
-                            </form>
-                        </div>
-                        <div class="tab-pane fade" id="signup">
-                            <form name="signup" class="form-horizontal">
-                                <fieldset>
-                                    <!-- Sign Up Form -->
-                                    <!-- Text input-->
-                                    <div class="control-group">
-                                        <label class="control-label" for="Email">Email:</label>
-                                        <div class="controls">
-                                            <input id="Email" name="Email" class="form-control" type="text" placeholder="JoeSixpack@sixpacksrus.com" class="input-large" required="">
+                                    </fieldset>
+                                </form>
+                            </div>
+                            <div class="tab-pane fade" id="signup">
+                                <form name="signup" class="form-horizontal">
+                                    <fieldset>
+                                        <!-- Sign Up Form -->
+                                        <!-- Text input-->
+                                        <div class="control-group">
+                                            <label class="control-label" for="Email">Email:</label>
+                                            <div class="controls">
+                                                <input id="Email" name="Email" class="form-control" type="text" placeholder="JoeSixpack@sixpacksrus.com" class="input-large" required="">
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <!-- Text input-->
-                                    <div class="control-group">
-                                        <label class="control-label" for="userid">Alias:</label>
-                                        <div class="controls">
-                                            <input id="userid" name="userid" class="form-control" type="text" placeholder="JoeSixpack" class="input-large" required="">
+                                        <!-- Text input-->
+                                        <div class="control-group">
+                                            <label class="control-label" for="userid">Alias:</label>
+                                            <div class="controls">
+                                                <input id="userid" name="userid" class="form-control" type="text" placeholder="JoeSixpack" class="input-large" required="">
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <!-- Password input-->
-                                    <div class="control-group">
-                                        <label class="control-label" for="password">Password:</label>
-                                        <div class="controls">
-                                            <input id="password" name="password" class="form-control" type="password" placeholder="********" class="input-large" required="">
-                                            <em>1-8 Characters</em>
+                                        <!-- Password input-->
+                                        <div class="control-group">
+                                            <label class="control-label" for="password">Password:</label>
+                                            <div class="controls">
+                                                <input id="password" name="password" class="form-control" type="password" placeholder="********" class="input-large" required="">
+                                                <em>1-8 Characters</em>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <!-- Button -->
-                                    <div class="control-group">
-                                        <label class="control-label" for="confirmsignup"></label>
-                                        <div class="controls">
-                                            <button type="button" onclick="parse_signup()" id="confirmsignup" name="confirmsignup" class="btn btn-success">Sign Up</button>
+                                        <!-- Button -->
+                                        <div class="control-group">
+                                            <label class="control-label" for="confirmsignup"></label>
+                                            <div class="controls">
+                                                <button type="button" onclick="parse_signup()" id="confirmsignup" name="confirmsignup" class="btn btn-success">Sign Up</button>
+                                            </div>
                                         </div>
-                                    </div>
-                                </fieldset>
-                            </form>
+                                    </fieldset>
+                                </form>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <center>
+                    <div class="modal-footer">
+                        <center>
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </center>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
 </body>
 
 </html>
