@@ -17,10 +17,10 @@
     <script src="hint/anyword-hint.js"></script>
 
     <script src="hint/javascript-hint.js"></script>
-    <link rel="stylesheet" href="fancybox/jquery.fancybox.css"/>
+    <link rel="stylesheet" href="fancybox/jquery.fancybox.css" />
     <script src="fancybox/jquery.fancybox.js"></script>
     <script src="fancybox/jquery.fancybox.pack.js"></script>
-    
+
     <script type="text/javascript">        
         
     </script>
@@ -37,12 +37,33 @@
 
             init_accordian();
             init_fancybox();
+            init_codemirror();
 
             frame = $('#output_iframe'),
             contents = frame.contents(),
             body_compile = contents.find('body');
 
 
+
+
+            $('#output_iframe').attr('src', "../phaser/lessons" + lesson + ".html");
+
+
+        });
+
+
+        function compile() {
+            debugger;
+
+            var user_javascript_text = "<script> " + $("#user_javascript").val() + "<\/script>";
+            $(".output_iframe").contents().find("body").append(user_javascript_text);
+            window.frames['output_iframe'].unLoadGame();
+            window.frames['output_iframe'].startGame();
+            $(".output_iframe").show();
+
+        }
+
+        function init_codemirror() {
 
             $("#user_javascript").html(predifined_js);
 
@@ -66,22 +87,6 @@
                 CodeMirror.showHint(cm, CodeMirror.hint.javascript);
             }
 
-            $('#output_iframe').attr('src', "../phaser/lessons" + lesson + ".html");
-
-            $('a.various').on("click", function () {
-                compile();
-            });
-        });
-
-
-        function compile() {
-            debugger;
-
-            var user_javascript_text = "<script> " + $("#user_javascript").val() + "<\/script>";
-            $(".output_iframe").contents().find("body").append(user_javascript_text);
-            window.frames['output_iframe'].unLoadGame();
-            window.frames['output_iframe'].startGame();
-            $(".output_iframe").show();
 
         }
 
@@ -134,8 +139,6 @@
         function resetEditor() {
             cm.setValue(predifined_js);
             cm.clearHistory();
-
-            //$("#user_javascript").html(predifined_js);
         }
 
     </script>
@@ -151,7 +154,7 @@
             border: 1px solid #eee;
             height: auto;
             line-height: 1.5;
-            width: 45% !important;
+            width: 85% !important;
             display: inline-block;
         }
 
@@ -162,6 +165,10 @@
             width: 48% !important;
             float: right;
             margin-right: 2px;
+            display: none;
+        }
+
+        .output_div {
             display: none;
         }
 
@@ -257,13 +264,13 @@
     <div id="main_content" style="display: block">
 
 
-        <textarea id="user_javascript" rows="20" cols="40" style="height: 85%; max-height: 85%; display: inline-block"> 
+        <textarea id="user_javascript" rows="20" cols="50" style="height: 85%; max-height: 85%; display: inline-block"> 
 	</textarea>
 
 
-        <div style="display: inline-block; vertical-align: top; margin: auto"">
-            <a class="various" href="#output_div">Iframe</a>
-            <button id="Compile" onclick="compile()" style="display: block; vertical-align: top; margin: auto;background: url(img/run.png) no-repeat;">Run</button>
+        <div style="display: inline-block; vertical-align: top; margin: auto">
+            <a class="various">Iframe</a>
+            <button id="Compile" onclick="compile()" style="display: block; vertical-align: top; margin: auto; background: url(img/run.png) no-repeat"></button>
             <button id="btnReset" onclick="resetEditor()" style="display: block; vertical-align: top; margin: auto">Reset</button>
         </div>
 
