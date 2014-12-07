@@ -81,11 +81,12 @@
 
         	user.signUp(null, {
             	success: function (user) {
-			if (user.attributes.hasOwnProperty('usernmae')) {
-				$('button.sign-up-btn').text('Welcome' + user.attributes['username']);
+			if (user.attributes.hasOwnProperty('username')) {
+				$('button.sign-up-btn').text('Welcome, ' + user.attributes['username']);
 			} else {
 		 		$('button.sign-up-btn').text('Welcome');
 			}
+			$('input[name="parse_userid"]').val(user.id);
 			$('.modal').modal('hide');	
             	},
             	error: function (user, error) {
@@ -93,7 +94,36 @@
                 	alert("Error: " + error.code + " " + error.message);
             	}
         	});
-    	}        
+    	} 
+	function parse_signin() {
+		Parse.initialize("czqt5B1wAcwB03VCL0Povn19BlSO4u1OShrVuCue", "zWNK5ZsVPiQtlippORub9widCFvpJQ22auiHOYNE");
+		var id = $('form[name="signin"] input[name="userid"]').val();
+		var password = $('form[name="signin"] input[name="passwordinput"]').val();
+		Parse.User.logIn(id, password, {
+			success: function(user) {
+				if (user.attributes.hasOwnProperty('username')) {
+					$('button.sign-up-btn').text('Welcome, ' + user.attributes['username']);
+				} else {
+		 			$('button.sign-up-btn').text('Welcome');
+				}
+				$('input[name="parse_userid"]').val(user.id);
+				$('.modal').modal('hide');
+				var UserJS = Parse.Object.extend('UserJS');
+				var query = new Parse.Query(UserJS);
+				query.equalTo('userId', user.id);
+				query.equalTo('lesson', getUrlParameter('lesson'));
+				query.find({
+					success:function(results) {
+						debugger;
+						//$('.output_iframe').contents().find('body').append(results[0].attributes.js);
+					}
+				});
+			},
+			error: function(user, error) {
+				alert("Error: " + error.code + " " + error.message);
+			}
+		});
+	}       
 	function compile() {
 
             var user_javascript_text = "<script> " + $("#user_javascript").val() + "<\/script>";
@@ -101,10 +131,36 @@
             window.frames['output_iframe'].unLoadGame();
             window.frames['output_iframe'].startGame();
             $(".output_iframe").show();
-	    
-
+	    parse_save_js(user_javascript_text);    
+	
         }
+	
+	function parse_save_js(user_js) {
+		Parse.initialize("czqt5B1wAcwB03VCL0Povn19BlSO4u1OShrVuCue", "zWNK5ZsVPiQtlippORub9widCFvpJQ22auiHOYNE");
+		var UserJS = Parse.Object.extend('UserJS');
+		var userJS = new UserJS();
+		var parse_userid = $('input[name="parse_userid"]').val();
+		if (parse_userid) {
+			userJS.set('userId', parse_userid);
+			userJS.set('js', user_js);
+			userJS.set('lesson', getUrlParameter('lesson'));
+			userJS.save();
+		}
+	}
 
+	function getUrlParameter(sParam)
+	{
+    		var sPageURL = window.location.search.substring(1);
+    		var sURLVariables = sPageURL.split('&');
+    		for (var i = 0; i < sURLVariables.length; i++) 
+    		{
+        		var sParameterName = sURLVariables[i].split('=');
+        		if (sParameterName[0] == sParam) 
+        		{
+            		return sParameterName[1];
+        		}
+    		}	
+	}
         function init_fancybox() {
 
         }
@@ -256,11 +312,11 @@
             color: yellow;
         }*/
     </style>
-
+	<input type="hidden" name="parse_userid" />
 </head>
 <body>
 	<div style='height:60px;'>
-	<button class="btn btn-primary btn-lg sign-up-btn" href="#signup" style='float:right;' data-toggle="modal" data-target=".bs-modal-sm">Sign In/Register</button>
+	<button class="btn btn-primary btn-lg sign-up-btn" href="#signup" style='float:right;margin-right:20px;' data-toggle="modal" data-target=".bs-modal-sm">Sign In/Register</button>
 	</div>
     <div id="top_bars">
         <dl class="dl">
@@ -341,7 +397,7 @@
                                     <div class="control-group">
                                         <label class="control-label" for="signin"></label>
                                         <div class="controls">
-                                            <button id="signin" name="signin" class="btn btn-success">Sign In</button>
+                                            <button type="button" id="signin" onclick="parse_signin()" name="signin" class="btn btn-success">Sign In</button>
                                         </div>
                                     </div>
                                 </fieldset>
