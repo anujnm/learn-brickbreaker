@@ -1,12 +1,15 @@
-﻿<html>
+﻿﻿<html>
 <head>
 
     <title>CuriousCoderz</title>
     <link rel="stylesheet" href="style/codemirror.css">
     <!--<link rel="stylesheet" href="http://codemirror.net/theme/monokai.css">-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
 
     <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
     <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 
     <script src="js/utils.js"></script>
     <script src="js/codemirror.js"></script>
@@ -33,27 +36,23 @@
         var lesson = getUrlParameter('lesson');
         var cm;
         var predifined_js = "".concat('function onCreate() {\n \n } \n', " function onUpdate() {\n \n } \n");
+
         $(window).load(function () {
 
             init_accordian();
-            init_fancybox();
             init_codemirror();
 
             frame = $('#output_iframe'),
             contents = frame.contents(),
             body_compile = contents.find('body');
 
-
-
-
             $('#output_iframe').attr('src', "../phaser/lessons" + lesson + ".html");
-
-
+            $('.modal').on('show.bs.modal', function () {
+                compile();
+            });
         });
 
-
         function compile() {
-            debugger;
 
             var user_javascript_text = "<script> " + $("#user_javascript").val() + "<\/script>";
             $(".output_iframe").contents().find("body").append(user_javascript_text);
@@ -63,8 +62,8 @@
 
         }
 
-        function init_codemirror() {
 
+        function init_codemirror() {
             $("#user_javascript").html(predifined_js);
 
             var editor_text_area = $("#user_javascript");
@@ -87,25 +86,7 @@
                 CodeMirror.showHint(cm, CodeMirror.hint.javascript);
             }
 
-
         }
-
-        function init_fancybox() {
-
-            $(".various").fancybox({
-                maxWidth: 800,
-                maxHeight: 600,
-                fitToView: false,
-                width: '70%',
-                height: '70%',
-                autoSize: false,
-                closeClick: false,
-                openEffect: 'none',
-                closeEffect: 'none'
-            });
-
-        }
-
         function init_accordian() {
 
             // Script to show the first dd element  
@@ -139,6 +120,8 @@
         function resetEditor() {
             cm.setValue(predifined_js);
             cm.clearHistory();
+
+            //$("#user_javascript").html(predifined_js);
         }
 
     </script>
@@ -154,22 +137,24 @@
             border: 1px solid #eee;
             height: auto;
             line-height: 1.5;
-            width: 85% !important;
+            width: 45% !important;
             display: inline-block;
         }
 
         .output_iframe {
             border: 1px solid #f8f8f2;
-            height: 90%;
-            max-height: 90%;
-            width: 48% !important;
-            float: right;
-            margin-right: 2px;
+            height: 620px;
+            max-height: 620px;
+            width: 820px;
+            margin-right: auto;
             display: none;
+            margin-left: auto;
         }
 
         .output_div {
-            display: none;
+            width: 800px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         h1 {
@@ -181,6 +166,15 @@
             -moz-box-shadow: 0px 0px 10px #000000;
             -webkit-box-shadow: 0px 0px 10px #000000;
             box-shadow: 0px 0px 10px #000000;
+        }
+
+        .modal-content {
+            height: 800px;
+            width: 1000px;
+        }
+
+        .modal-dialog {
+            width: 1000px;
         }
 
         .dt {
@@ -264,20 +258,31 @@
     <div id="main_content" style="display: block">
 
 
-        <textarea id="user_javascript" rows="20" cols="50" style="height: 85%; max-height: 85%; display: inline-block"> 
+        <textarea id="user_javascript" rows="20" cols="40" style="height: 85%; max-height: 85%; display: inline-block"> 
 	</textarea>
 
 
         <div style="display: inline-block; vertical-align: top; margin: auto">
-            <a class="various">Iframe</a>
-            <button id="Compile" onclick="compile()" style="display: block; vertical-align: top; margin: auto; background: url(img/run.png) no-repeat"></button>
+            <button id="Compile" data-toggle="modal" data-target=".modal" style="display: block; vertical-align: top; margin: auto; background: url(img/run.png) no-repeat;">Run</button>
             <button id="btnReset" onclick="resetEditor()" style="display: block; vertical-align: top; margin: auto">Reset</button>
         </div>
 
 
-        <div id="output_div">
-            <iframe id="output_iframe" name="output_iframe" class="output_iframe"></iframe>
+        <div class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div id="output_div" class="output_div">
+                            <iframe id="output_iframe" name="output_iframe" class="output_iframe"></iframe>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
         </div>
+        <!-- /.modal -->
     </div>
 
 

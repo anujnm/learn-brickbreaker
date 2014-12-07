@@ -30,6 +30,46 @@
 
                 function PaddleList() {
                     this.mPaddleList = new Array();
+
+                    this.length = function ()
+                    {
+                        return this.mPaddleList.length;
+                    };
+
+                    this.get = function (index)
+                    {
+                        var retval = null;
+                        if (index !== 'undefined' && index !== null && index >= 0 && index < this.mPaddleList.length)
+                        {
+                            retval = this.mPaddleList[index];
+                        }
+                        return retval;
+                    };
+
+                    this.set = function (index, object)
+                    {
+                        if (index !== 'undefined' && index !== null && index >= 0 && index < this.mPaddleList.length)
+                        {
+                            this.mPaddleList[index] = object;
+                        }
+                    };
+
+                    this.remove = function (index)
+                    {
+                        var retval = null;
+                        if (index !== 'undefined' && index !== null && index >= 0 && index < this.mPaddleList.length)
+                        {
+                            retval = this.mPaddleList[index];
+                            this.mPaddleList.splice(index, 1);
+                        }
+                        return retval;
+                    };
+
+                    this.removeAll = function ()
+                    {
+                        this.mPaddleList.splice(0, this.mPaddleList.length);
+                    };
+
                     this.addPaddle = function (x, y)
                     {
                         this.mPaddle = new Paddle();
@@ -58,6 +98,11 @@
                     this.mPrimitive.body.collideWorldBounds = true;
                     this.mPrimitive.body.bounce.set(1);
                     this.mPrimitive.body.immovable = true;
+
+                    this.destroy = function ()
+                    {
+                        this.mPrimitive.kill();
+                    };
 
                     this.reflect = function (pBall)
                     {
@@ -139,6 +184,45 @@
                 function BallList() {
                     this.mBallList = new Array();
 
+                    this.length = function ()
+                    {
+                        return this.mBallList.length;
+                    };
+
+                    this.get = function (index)
+                    {
+                        var retval = null;
+                        if (index !== 'undefined' && index !== null && index >= 0 && index < this.mBallList.length)
+                        {
+                            retval = this.mBallList[index];
+                        }
+                        return retval;
+                    };
+
+                    this.set = function (index, object)
+                    {
+                        if (index !== 'undefined' && index !== null && index >= 0 && index < this.mBallList.length)
+                        {
+                            this.mBallList[index] = object;
+                        }
+                    };
+
+                    this.remove = function (index)
+                    {
+                        var retval = null;
+                        if (index !== 'undefined' && index !== null && index >= 0 && index < this.mBallList.length)
+                        {
+                            retval = this.mBallList[index];
+                            this.mBallList.splice(index, 1);
+                        }
+                        return retval;
+                    };
+
+                    this.removeAll = function ()
+                    {
+                        this.mBallList.splice(0, this.mBallList.length);
+                    };
+
                     this.addBall = function (x, y)
                     {
                         this.mBall = new Ball();
@@ -169,6 +253,12 @@
                     this.mPrimitive.body.collideWorldBounds = true;
                     this.mPrimitive.body.bounce.set(1);
                     this.mPrimitive.animations.add('spin', ['ball_1.png', 'ball_2.png', 'ball_3.png', 'ball_4.png', 'ball_5.png'], 50, true, false);
+
+
+                    this.destroy = function ()
+                    {
+                        this.mPrimitive.kill();
+                    };
 
                     this.isCollided = function (object)
                     {
@@ -237,6 +327,45 @@
                 {
                     this.mBrickList = new Array();
 
+                    this.length = function ()
+                    {
+                        return this.mBrickList.length;
+                    };
+
+                    this.get = function (index)
+                    {
+                        var retval = null;
+                        if (index !== 'undefined' && index !== null && index >= 0 && index < this.mBrickList.length)
+                        {
+                            retval = this.mBrickList[index];
+                        }
+                        return retval;
+                    };
+
+                    this.set = function (index, object)
+                    {
+                        if (index !== 'undefined' && index !== null && index >= 0 && index < this.mBrickList.length)
+                        {
+                            this.mBrickList[index] = object;
+                        }
+                    };
+
+                    this.remove = function (index)
+                    {
+                        var retval = null;
+                        if (index !== 'undefined' && index !== null && index >= 0 && index < this.mBrickList.length)
+                        {
+                            retval = this.mBrickList[index];
+                            this.mBrickList.splice(index, 1);
+                        }
+                        return retval;
+                    };
+
+                    this.removeAll = function ()
+                    {
+                        this.mBrickList.splice(0, this.mBrickList.length);
+                    };
+
                     this.addBrick = function (x, y)
                     {
                         this.mBrick = new Brick();
@@ -254,7 +383,6 @@
 
                         return this.mBrick;
                     };
-
                     return this;
                 }
 
@@ -267,6 +395,11 @@
                     this.mPrimitive.body.collideWorldBounds = true;
                     this.mPrimitive.body.bounce.set(1);
                     this.mPrimitive.body.immovable = true;
+
+                    this.destroy = function ()
+                    {
+                        this.mPrimitive.kill();
+                    };
 
                     this.isCollided = function (object)
                     {
@@ -421,6 +554,16 @@
                     }
 
 
+                    // reset ball just for debugging easier :)
+                    if (game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
+                    {
+                        ball.setX(game.world.centerX);
+                        ball.setY(500);
+                        ball.setVelocityY(-300);
+                        ball.setVelocityX(-75);
+                    }
+
+
                     // handle paddle collision
                     if (ball.isCollided(paddle))
                     {
@@ -429,14 +572,24 @@
 
 
                     // handle bricks collision
-                    var totalBricks = brickList.mBrickList.length;
+                    var totalBricks = brickList.length();
+                    var brickIndexToRemove = -1;
                     for (var i = 0; i < totalBricks; i++) {
-                        
-                        if (ball.isCollided(brickList.mBrickList[i]))
+                        var brick = brickList.get(i);
+                        if (ball.isCollided(brick))
                         {
-                            brickList.mBrickList[i].mPrimitive.kill();
+                            brickIndexToRemove = i;
+                            brick.destroy();
+                            break;
                         }
                     }
+
+                    // remove brick from brick list
+                    if (brickIndexToRemove >= 0)
+                    {
+                        brickList.remove(brickIndexToRemove);
+                    }
+
                 }
 //user code*************************END*****************************************                
             };
