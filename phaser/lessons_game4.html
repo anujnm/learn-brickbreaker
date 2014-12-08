@@ -1,0 +1,546 @@
+﻿<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>hello phaser!</title>
+    <script src="phaser.min.js"></script>
+    <script src="phaser.js"></script>
+</head>
+<body>
+
+    <script type="text/javascript">
+
+        window.onload = function () {
+
+
+        };
+
+        function startGame() {
+
+            var score;
+            var scoreGUIText;
+            var brickList;
+            var ballList;
+            var ball;
+            var paddleList;
+            var paddle;
+
+            var BRICK_TYPE_BLUE = 1;
+            var BRICK_TYPE_ORANGE = 2;
+            var BRICK_TYPE_RED = 3;
+            var BRICK_TYPE_GREEN = 4;
+
+            var starfield;
+            var game = new Phaser.Game(800, 600, Phaser.AUTO, 'game_canvas', { preload: preload, create: create, update: update });
+
+            //Abstraced Spiders Lib**************************START**************************
+
+            function PaddleList() {
+                this.mPaddleList = new Array();
+
+                this.length = function () {
+                    return this.mPaddleList.length;
+                };
+
+                this.get = function (index) {
+                    var retval = null;
+                    if (index !== 'undefined' && index !== null && index >= 0 && index < this.mPaddleList.length) {
+                        retval = this.mPaddleList[index];
+                    }
+                    return retval;
+                };
+
+                this.set = function (index, object) {
+                    if (index !== 'undefined' && index !== null && index >= 0 && index < this.mPaddleList.length) {
+                        this.mPaddleList[index] = object;
+                    }
+                };
+
+                this.remove = function (index) {
+                    var retval = null;
+                    if (index !== 'undefined' && index !== null && index >= 0 && index < this.mPaddleList.length) {
+                        retval = this.mPaddleList[index];
+                        this.mPaddleList.splice(index, 1);
+                    }
+                    return retval;
+                };
+
+                this.removeAll = function () {
+                    this.mPaddleList.splice(0, this.mPaddleList.length);
+                };
+
+                this.addPaddle = function (x, y) {
+                    this.mPaddle = new Paddle();
+                    this.mPaddleList.push(this.mPaddle);
+
+                    if (x !== 'undefined' && x !== null) {
+                        this.mPaddle.setX(x);
+                    }
+
+                    if (y !== 'undefined' && y !== null) {
+                        this.mPaddle.setY(y);
+                    }
+
+                    return this.mPaddle;
+                };
+
+                return this;
+            }
+
+            function Paddle() {
+                this.mPrimitive = game.add.sprite(game.world.centerX, 500, 'breakout', 'paddle_big.png');
+                this.mPrimitive.anchor.setTo(0.5, 0.5);
+                game.physics.enable(this.mPrimitive, Phaser.Physics.ARCADE);
+                this.mPrimitive.body.collideWorldBounds = true;
+                this.mPrimitive.body.bounce.set(1);
+                this.mPrimitive.body.immovable = true;
+
+                this.destroy = function () {
+                    this.mPrimitive.kill();
+                };
+
+                this.reflect = function (pBall) {
+                    var diff = 0;
+
+                    if (pBall.mPrimitive.x < this.mPrimitive.x) {
+                        //  Ball is on the left-hand side of the paddle
+                        diff = this.mPrimitive.x - pBall.mPrimitive.x;
+                        pBall.mPrimitive.body.velocity.x = (-10 * diff);
+                    }
+                    else if (pBall.mPrimitive.x > this.mPrimitive.x) {
+                        //  Ball is on the right-hand side of the paddle
+                        diff = pBall.mPrimitive.x - this.mPrimitive.x;
+                        pBall.mPrimitive.body.velocity.x = (10 * diff);
+                    }
+                    else {
+                        //  Ball is perfectly in the middle
+                        //  Add a little random X to stop it bouncing straight up!
+                        pBall.mPrimitive.body.velocity.x = 2 + Math.random() * 8;
+                    }
+
+                };
+
+                this.isCollided = function (object) {
+                    return game.physics.arcade.collide(this.mPrimitive, object.mPrimitive, null, null, this);
+                };
+
+                this.setX = function (x) {
+                    this.mPrimitive.x = x;
+                    return this.mPrimitive.x;
+                };
+
+                this.getX = function () {
+                    return this.mPrimitive.x;
+                };
+
+                this.setY = function (y) {
+                    this.mPrimitive.y = y;
+                    return this.mPrimitive.y;
+                };
+
+                this.getY = function () {
+                    return this.mPrimitive.y;
+                };
+
+                this.setVelocityX = function (x) {
+                    this.mPrimitive.body.velocity.x = x;
+                    return this.mPrimitive.body.velocity.x;
+                };
+
+                this.getVelocityX = function () {
+                    return this.mPrimitive.body.velocity.x;
+                };
+
+                this.setVelocityY = function (y) {
+                    this.mPrimitive.body.velocity.y = y;
+                    return this.mPrimitive.body.velocity.y;
+                };
+
+                this.getVelocityY = function () {
+                    return this.mPrimitive.body.velocity.y;
+                };
+
+                return this;
+            }
+
+            function BallList() {
+                this.mBallList = new Array();
+
+                this.length = function () {
+                    return this.mBallList.length;
+                };
+
+                this.get = function (index) {
+                    var retval = null;
+                    if (index !== 'undefined' && index !== null && index >= 0 && index < this.mBallList.length) {
+                        retval = this.mBallList[index];
+                    }
+                    return retval;
+                };
+
+                this.set = function (index, object) {
+                    if (index !== 'undefined' && index !== null && index >= 0 && index < this.mBallList.length) {
+                        this.mBallList[index] = object;
+                    }
+                };
+
+                this.remove = function (index) {
+                    var retval = null;
+                    if (index !== 'undefined' && index !== null && index >= 0 && index < this.mBallList.length) {
+                        retval = this.mBallList[index];
+                        this.mBallList.splice(index, 1);
+                    }
+                    return retval;
+                };
+
+                this.removeAll = function () {
+                    this.mBallList.splice(0, this.mBallList.length);
+                };
+
+                this.addBall = function (x, y) {
+                    this.mBall = new Ball();
+                    this.mBallList.push(this.mBall);
+
+                    if (x !== 'undefined' && x !== null) {
+                        this.mBall.setX(x);
+                    }
+
+                    if (y !== 'undefined' && y !== null) {
+                        this.mBall.setY(y);
+                    }
+
+                    return this.mBall;
+                };
+                return this;
+            }
+
+            function Ball() {
+
+                this.mPrimitive = game.add.sprite(game.world.centerX, game.world.centerY + 150, 'breakout', 'ball_1.png');
+                this.mPrimitive.checkWorldBounds = true;
+
+                game.physics.enable(this.mPrimitive, Phaser.Physics.ARCADE);
+
+                this.mPrimitive.body.collideWorldBounds = true;
+                this.mPrimitive.body.bounce.set(1);
+                this.mPrimitive.animations.add('spin', ['ball_1.png', 'ball_2.png', 'ball_3.png', 'ball_4.png', 'ball_5.png'], 50, true, false);
+
+
+                this.destroy = function () {
+                    this.mPrimitive.kill();
+                };
+
+                this.isCollided = function (object) {
+                    return game.physics.arcade.collide(this.mPrimitive, object.mPrimitive, null, null, this);
+
+                };
+
+                this.setX = function (x) {
+                    this.mPrimitive.x = x;
+                    return this.mPrimitive.x;
+                };
+
+                this.getX = function () {
+                    return this.mPrimitive.x;
+                };
+
+                this.setY = function (y) {
+                    this.mPrimitive.y = y;
+                    return this.mPrimitive.y;
+                };
+
+                this.getY = function () {
+                    return this.mPrimitive.y;
+                };
+
+                this.setVelocityX = function (x) {
+                    this.mPrimitive.body.velocity.x = x;
+                    return this.mPrimitive.body.velocity.x;
+                };
+
+                this.getVelocityX = function () {
+                    return this.mPrimitive.body.velocity.x;
+                };
+
+                this.setVelocityY = function (y) {
+                    this.mPrimitive.body.velocity.y = y;
+                    return this.mPrimitive.body.velocity.y;
+                };
+
+                this.getVelocityY = function () {
+                    return this.mPrimitive.body.velocity.y;
+                };
+
+                this.playSpinAnimation = function () {
+                    return this.mPrimitive.animations.play('spin');
+                };
+
+                this.stopSpinAnimation = function () {
+                    this.mPrimitive.animations.stop('spin');
+                };
+
+                return this;
+            }
+
+            function BrickList() {
+                this.mBrickList = new Array();
+
+                this.length = function () {
+                    return this.mBrickList.length;
+                };
+
+                this.get = function (index) {
+                    var retval = null;
+                    if (index !== 'undefined' && index !== null && index >= 0 && index < this.mBrickList.length) {
+                        retval = this.mBrickList[index];
+                    }
+                    return retval;
+                };
+
+                this.set = function (index, object) {
+                    if (index !== 'undefined' && index !== null && index >= 0 && index < this.mBrickList.length) {
+                        this.mBrickList[index] = object;
+                    }
+                };
+
+                this.remove = function (index) {
+                    var retval = null;
+                    if (index !== 'undefined' && index !== null && index >= 0 && index < this.mBrickList.length) {
+                        retval = this.mBrickList[index];
+                        this.mBrickList.splice(index, 1);
+                    }
+                    return retval;
+                };
+
+                this.removeAll = function () {
+                    this.mBrickList.splice(0, this.mBrickList.length);
+                };
+
+                this.addBrick = function (x, y) {
+                    this.mBrick = new Brick();
+                    this.mBrickList.push(this.mBrick);
+
+                    if (x !== 'undefined' && x !== null) {
+                        this.mBrick.setX(x);
+                    }
+
+                    if (y !== 'undefined' && y !== null) {
+                        this.mBrick.setY(y);
+                    }
+
+                    return this.mBrick;
+                };
+                return this;
+            }
+
+            function Brick() {
+
+                this.mType = BRICK_TYPE_GREEN;
+                this.mPrimitive = game.add.sprite(game.world.centerX, game.world.centerY, 'breakout', 'brick_' + this.mType + '_1.png');
+                this.mPrimitive.anchor.setTo(0.5, 0.5);
+                game.physics.enable(this.mPrimitive, Phaser.Physics.ARCADE);
+                this.mPrimitive.body.collideWorldBounds = true;
+                this.mPrimitive.body.bounce.set(1);
+                this.mPrimitive.body.immovable = true;
+
+                this.destroy = function () {
+                    this.mPrimitive.kill();
+                };
+
+                this.isCollided = function (object) {
+                    return game.physics.arcade.collide(this.mPrimitive, object.mPrimitive, null, null, this);
+                };
+
+                this.setType = function (type) {
+                    this.mType = type;
+                    this.mPrimitive.frameName = 'brick_' + this.mType + '_1.png';
+                    return this.mType;
+                };
+
+                this.getType = function () {
+                    return this.mType;
+                };
+
+                this.setX = function (x) {
+                    this.mPrimitive.x = x;
+                    return this.mPrimitive.x;
+                };
+
+                this.getX = function () {
+                    return this.mPrimitive.x;
+                };
+
+                this.setY = function (y) {
+                    this.mPrimitive.y = y;
+                    return this.mPrimitive.y;
+                };
+
+                this.getY = function () {
+                    return this.mPrimitive.y;
+                };
+
+                this.setVelocityX = function (x) {
+                    this.mPrimitive.body.velocity.x = x;
+                    return this.mPrimitive.body.velocity.x;
+                };
+
+                this.getVelocityX = function () {
+                    return this.mPrimitive.body.velocity.x;
+                };
+
+                this.setVelocityY = function (y) {
+                    this.mPrimitive.body.velocity.y = y;
+                    return this.mPrimitive.body.velocity.y;
+                };
+
+                this.getVelocityY = function () {
+                    return this.mPrimitive.body.velocity.y;
+                };
+
+                return this;
+            }
+
+            function GUIText() {
+
+                this.mText = game.add.text(0, 0, '', { font: "20px Arial", fill: "#ffffff", align: "left" });
+
+                this.setX = function (x) {
+                    this.mText.x = x;
+                    return this.mText.x;
+                };
+
+                this.getX = function () {
+                    return this.mText.x;
+                };
+
+                this.setY = function (y) {
+                    this.mText.y = y;
+                    return this.mText.y;
+                };
+
+                this.getY = function () {
+                    return this.mText.y;
+                };
+
+                this.setText = function (text) {
+                    this.mText.text = text;
+                    return this.mText.text;
+                };
+
+                this.getText = function () {
+                    return this.mText.text;
+                };
+
+                this.setHeight = function (height) {
+                    this.mText.height = height;
+                    return this.mText.height;
+                };
+
+                this.getHeight = function () {
+                    return this.mText.height;
+                };
+
+                this.setWidth = function (width) {
+                    this.mText.width = width;
+                    return this.mText.width;
+                };
+
+                this.getWidth = function () {
+                    return this.mText.width;
+                };
+
+                this.setFont = function (font) {
+                    this.mText.font = font;
+                    return this.mText.font;
+                };
+
+                this.getFont = function () {
+                    return this.mText.font;
+                };
+
+                this.setFontSize = function (fontSize) {
+                    this.mText.fontSize = fontSize;
+                    return this.mText.fontSize;
+                };
+
+                this.getFontSize = function () {
+                    return this.mText.fontSize;
+                };
+
+                this.setAlign = function (align) {
+                    this.mText.align = align;
+                    return this.mText.align;
+                };
+
+                this.getAlign = function () {
+                    return this.mText.align;
+                };
+
+                this.setFill = function (fill) {
+                    this.mText.fill = fill;
+                    return this.mText.fill;
+                };
+
+                this.getFill = function () {
+                    return this.mText.fill;
+                };
+
+                return this;
+            }
+
+
+
+            //Abstraced Spiders Lib************************END******************************
+
+
+            //Phaser BrickBreaker**************************START****************************
+            function preload() {
+                game.load.atlas('breakout', 'assets/games/breakout/breakout.png', 'assets/games/breakout/breakout.json');
+                game.load.image('starfield', 'assets/misc/starfield.jpg');
+            }
+
+            function create() {
+
+
+                game.physics.startSystem(Phaser.Physics.ARCADE);
+
+                //  We check bounds collisions against all walls other than the bottom one
+                game.physics.arcade.checkCollision.down = false;
+
+                starfield = game.add.tileSprite(0, 0, 800, 600, 'starfield');
+
+                paddleList = new PaddleList();
+                ballList = new BallList();
+                brickList = new BrickList();
+
+                onCreate();
+            }
+
+            function update() {
+
+                onUpdate();
+
+                if (ball.getY() > game.world.height + 10) {
+                    ball.setVelocityX(0);
+                    ball.setVelocityY(0);
+                }
+
+            }
+            //Phaser BrickBreaker*******************END*************************************   
+
+        }
+
+
+        function unLoadGame() {
+
+            document.getElementById("game_canvas").innerHTML = "";
+
+        }
+    </script>
+
+    <h1>Brick Breaker!</h1>
+
+    <div id="game_canvas"></div>
+
+</body>
+</html>
