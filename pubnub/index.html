@@ -15,7 +15,8 @@
     <script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
     <script src="http://cdn.pubnub.com/pubnub-3.4.4.js"></script>
     <script src="js/messenger.js"></script>
-</head> - See more at: http://www.pubnub.com/blog/pubnub-messenger-a-simple-chat-room/#sthash.GiqNNgP9.dpuf
+</head>
+- See more at: http://www.pubnub.com/blog/pubnub-messenger-a-simple-chat-room/#sthash.GiqNNgP9.dpuf
 <body>
 
     <!-- Chat Page -->
@@ -24,7 +25,8 @@
         <div data-role="content">
             <div data-role="header" data-position="fixed" data-tap-toggle="false">
                 <h1>Pub Messenger</h1>
-            </div><!-- /header -->
+            </div>
+            <!-- /header -->
 
             <div data-role="content">
                 <ul data-role="listview" id="messageList">
@@ -39,13 +41,19 @@
                     <div class="ui-block-b"><a href="#" id="backButton" data-rel="back" data-role="button">Chat Rooms</a></div>
                 </div>
             </div>
-        </div><!-- /content -->
+        </div>
+        <!-- /content -->
 
-    </div><!-- /page -->
+    </div>
+    <!-- /page -->
 
     <h1>Hello World</h1>
 
-    Enter Chat and press enter <div><input id=input placeholder=you-chat-here /></div>   Chat Output <div id=box></div>
+    Enter Chat and press enter
+    <div>
+        <input id="input" placeholder="you-chat-here" /></div>
+    Chat Output
+    <div id="box"></div>
     <script>$(document).ready(function () {
     // Initialize the PubNub API connection.
     var pubnub = PUBNUB.init({
@@ -101,7 +109,7 @@
         message: handleMessage
     });
 });</script>
-    
+
 
 </body>
 </html>

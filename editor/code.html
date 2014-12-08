@@ -8,6 +8,7 @@
 
     <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
     <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 
     <script src="js/utils.js"></script>
@@ -25,7 +26,8 @@
     <link href="style/slidemenu/default.css" rel="stylesheet" />
     <script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.3.2.min.js"></script>
 
-
+    <script src="http://cdn.pubnub.com/pubnub.min.js"></script>
+    <script src="../pubnub/js/pubnub.js"></script>
     <script type="text/javascript">
 
         var frame, contents, body_compile, goal_open;
@@ -38,7 +40,7 @@
 
             init_accordian();
             init_codemirror();
-
+            init_PubNub();
             frame = $('#output_iframe'),
             contents = frame.contents(),
             body_compile = contents.find('body');
@@ -267,11 +269,26 @@
 
         }
 
+        function openChat() {
+
+            var menuRight = document.getElementById('cbp-spmenu-s3'),
+             btnChat = document.getElementById('btnChat');
+            classie.toggle(menuRight, 'cbp-spmenu-open');
+            classie.toggle(btnChat, 'active');
+
+        }
+
+
         function toggleRightSlide() {
-            $("#cbp-spmenu-s2").removeClass("cbp-spmenu-open")
+            $("#cbp-spmenu-s2").removeClass("cbp-spmenu-open");
+            $("#cbp-spmenu-s3").removeClass("cbp-spmenu-open")
 
         }
     </script>
+
+
+
+
     <style>
         body {
             background-image: url(http://subtlepatterns.com/patterns/dark_geometric.png);
@@ -386,7 +403,7 @@
 
         .right_menu_item {
             margin: 10px 0px 0px 0px;
-            padding: 4px;
+            padding: 8px;
             background: rgba(187, 187, 187,0.5);
             width: 100%;
             min-width: 100%;
@@ -422,6 +439,11 @@
             white-space: pre-wrap;
             display: block;
         }
+
+        #messageContent {
+            font-size: smaller;
+            color: black;
+        }
     </style>
 
 </head>
@@ -456,15 +478,40 @@
 
         <div class="right_menu">
             <img src="img/run.png" id="Compile" title="Run" class="right_menu_item" data-toggle="modal" data-target=".modal.iframe-modal" style="display: block;" />
-            <img src="img/reset.png" id="btnReset" title="Reset" class="right_menu_item" onclick="resetEditor()" style="display: block;" />
-            <img src="img/info.png" id="btnInfo" title="More infomation" class="right_menu_item" onclick="openInfo()" style="display: block;" />
+            <img src="img/undo12.png" id="btnReset" title="Reset" class="right_menu_item" onclick="resetEditor()" style="display: block;" />
+            <img src="img/info23.png" id="btnInfo" title="More infomation" class="right_menu_item" onclick="openInfo()" style="display: block;" />
+            <img src="img/speechbubble7.png" id="btnChat" title="Chat" class="right_menu_item" onclick="openChat()" style="display: block;" />
         </div>
 
         <nav class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-right" id="cbp-spmenu-s2">
 
-            <img src="img/arrow_right.png" style="padding: 5px; cursor: hand" onclick="toggleRightSlide()">
+            <img src="img/arrow_right.png" style="padding: 15px; cursor: hand" onclick="toggleRightSlide()">
 
             <div id="lesson_info">
+            </div>
+        </nav>
+
+
+
+        <nav class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-right" id="cbp-spmenu-s3">
+
+            <img src="img/arrow_right.png" style="padding: 15px; cursor: hand" onclick="toggleRightSlide()">
+
+            <div data-role="content">
+
+
+                <div data-role="content">
+                    <ul data-role="listview" id="messageList">
+                    </ul>
+                </div>
+
+                <div style="vertical-align: baseline; position: fixed; width: 50%; bottom: 80px; text-align: center">
+                    <textarea id="messageContent" style="width: 65%; display: inline-block"></textarea>
+                    <button class="btn btn-primary btn-sm sign-up-btn" id="sendMessageButton" href="" style='vertical-align: top; text-align: center; display: inline-block'>Send</button>
+                    <!--<div class="ui-block-a"><a href="#" id="sendMessageButton2" data-role="button">Send Message</a></div>-->
+
+
+                </div>
             </div>
         </nav>
 
@@ -478,8 +525,8 @@
                         </div>
 
                     </div>
-		    <div class="modal-footer">
-                      <center>
+                    <div class="modal-footer">
+                        <center>
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                       </center>
                     </div>
