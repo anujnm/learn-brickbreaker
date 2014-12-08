@@ -36,6 +36,7 @@
         var predifined_js = getPredifinedCode(lesson);
         var lesson_title = getLessonTitle(lesson);
         var lesson_info = getLessonInfo(lesson);
+        var user_javascript_text;
         $(window).load(function () {
 
             init_accordian();
@@ -79,7 +80,7 @@
                 $("#btnPrev").hide();
             }
 
-            $('#output_iframe').attr('src', "../phaser/lessons" + lesson + ".html");
+            $('#output_iframe').attr('src', "../phaser/lessons_game" + lesson + ".html");
             $('.modal').on('show.bs.modal', function () {
                 compile();
             });
@@ -87,8 +88,11 @@
 
         function compile() {
 
-            var user_javascript_text = "<script> " + $("#user_javascript").val() + "<\/script>";
+
+
+            user_javascript_text = "<script>  " + cm.getValue() + "<\/script>";
             $(".output_iframe").contents().find("body").append(user_javascript_text);
+            alert(user_javascript_text);
             window.frames['output_iframe'].unLoadGame();
             window.frames['output_iframe'].startGame();
             $(".output_iframe").show();

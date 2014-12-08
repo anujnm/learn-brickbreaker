@@ -1,4 +1,4 @@
-﻿var BASE_URL = "http://localhost/abstracted-spiders/";
+﻿var BASE_URL = "http://anujnm.koding.io/";
 
 
 
